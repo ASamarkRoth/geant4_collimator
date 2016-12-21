@@ -51,7 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/anton/Documents/PhD/geant4/project_course
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/anton/Documents/PhD/geant4/project_course/build
+CMAKE_BINARY_DIR = /home/anton/Documents/PhD/geant4/project_course
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -111,11 +111,22 @@ install/local/fast: install/local
 
 .PHONY : install/local/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/home/anton/Ebbe_programs/cmake-3.6.2/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+
+.PHONY : install/strip/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/anton/Documents/PhD/geant4/project_course/build/CMakeFiles /home/anton/Documents/PhD/geant4/project_course/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/anton/Documents/PhD/geant4/project_course/CMakeFiles /home/anton/Documents/PhD/geant4/project_course/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/anton/Documents/PhD/geant4/project_course/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/anton/Documents/PhD/geant4/project_course/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -168,11 +179,6 @@ collimator: cmake_check_build_system
 collimator/fast:
 	$(MAKE) -f CMakeFiles/collimator.dir/build.make CMakeFiles/collimator.dir/build
 .PHONY : collimator/fast
-
-# Manual pre-install relink rule for target.
-collimator/preinstall:
-	$(MAKE) -f CMakeFiles/collimator.dir/build.make CMakeFiles/collimator.dir/preinstall
-.PHONY : collimator/preinstall
 
 collimator.o: collimator.cc.o
 
@@ -401,6 +407,7 @@ help:
 	@echo "... list_install_components"
 	@echo "... install"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... B3a"
 	@echo "... collimator"
 	@echo "... collimator.o"

@@ -15,3 +15,9 @@
 #
 # Visualization setting
 /control/execute vis.mac
+
+#Setting macro path to created folder
+/control/macroPath /home/anton/Documents/PhD/geant4/project_course/macros
+
+#Executing my own visual settings
+/control/execute visuals.mac

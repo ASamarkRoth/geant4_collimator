@@ -48,8 +48,8 @@ set(EXAMPLEB3_SCRIPTS
   exampleB3.in
   exampleB3.out
   init_vis.mac
-  run1.mac
-  run2.mac
+  macros/run1.mac
+  macros/run2.mac
   vis.mac
   )
 
