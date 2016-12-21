@@ -33,6 +33,7 @@
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
+#include "G4GeneralParticleSource.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -46,11 +47,12 @@ B3PrimaryGeneratorAction::B3PrimaryGeneratorAction()
  : G4VUserPrimaryGeneratorAction(),
    fParticleGun(0)
 {
-  G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
+
+  fParticleGun  = new G4GeneralParticleSource();
 
   // default particle kinematic
 
+  /*
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle
                     = particleTable->FindParticle("chargedgeantino");
@@ -58,6 +60,7 @@ B3PrimaryGeneratorAction::B3PrimaryGeneratorAction()
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
   fParticleGun->SetParticleEnergy(1*eV);    
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,6 +74,7 @@ B3PrimaryGeneratorAction::~B3PrimaryGeneratorAction()
 
 void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  /*
   G4ParticleDefinition* particle = fParticleGun->GetParticleDefinition();
   if (particle == G4ChargedGeantino::ChargedGeantino()) {
     //fluorine 
@@ -94,6 +98,7 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   y0 += dy0*(G4UniformRand()-0.5);
   z0 += dz0*(G4UniformRand()-0.5);
   fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  */
             
   //create vertex
   //
