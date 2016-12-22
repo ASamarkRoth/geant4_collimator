@@ -8,15 +8,72 @@
 # Initialize kernel
 /run/initialize
 #
-/control/verbose 2
-/tracking/verbose 2
+/control/verbose 0
+/tracking/verbose 0
+
+# define scoring mesh
 #
 
-/gps/pos/centre 0 0 0 
-/gps/ang/type iso
-/gps/ene/mono 661.7 keV
+/score/create/boxMesh boxMesh_1
+/score/mesh/boxSize 10. 10. 0.01 cm
+/score/mesh/nBin 100 100 5
+/score/mesh/translate/xyz 0 0 120 mm
 
-/run/beamOn 10
+#
+# define scorers and filters
+#
+/score/quantity/population population
+/score/filter/particle gammaFilter gamma
+
+/score/quantity/population fullE_population
+/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
+
+#
+/score/close
+#
+/score/create/boxMesh boxMesh_2
+/score/mesh/boxSize 10. 10. 0.01 cm
+/score/mesh/nBin 100 100 5
+/score/mesh/translate/xyz 0 0 500 mm
+
+#
+# define scorers and filters
+#
+/score/quantity/population population
+/score/filter/particle gammaFilter gamma
+
+/score/quantity/population fullE_population
+/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
+
+#
+/score/close
+#
+/score/create/cylinderMesh collimator
+/score/mesh/cylinderSize 10. 5. cm
+/score/mesh/nBin 1 10 1
+/score/mesh/translate/xyz 0 0 50 mm
+
+#
+# define scorers and filters
+#
+/score/quantity/population population
+/score/filter/particle gammaFilter gamma
+
+/score/quantity/population fullE_population
+/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
+
+/score/quantity/energyDeposit Edep_collimator
+
+#
+/score/close
+
+
+/run/beamOn 1000
+
+#/score/drawProjection boxMesh_1 population
+#/score/drawProjection boxMesh_2 population
+/score/drawProjection collimator Edep_collimator
+
 #
 #/tracking/verbose 0
 #/run/beamOn 20

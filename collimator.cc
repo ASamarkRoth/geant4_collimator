@@ -41,9 +41,11 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
+#include "G4ScoringManager.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "g4root.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,6 +70,8 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
 #endif  
 
+  G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   // Set mandatory initialization classes
   //
   runManager->SetUserInitialization(new B3DetectorConstruction);

@@ -124,12 +124,6 @@ void B3aRunAction::EndOfRunAction(const G4Run* run)
      << G4endl
      << "  The run was " << nofEvents << " "<< partName;
   }      
-  G4cout
-     << "; Nb of 'good' e+ annihilations: " << fGoodEvents.GetValue()  << G4endl
-     << " Total dose in patient : " << G4BestUnit(fSumDose.GetValue(),"Dose") 
-     << G4endl 
-     << "------------------------------------------------------------" << G4endl 
-     << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

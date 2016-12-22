@@ -1,1 +1,10 @@
-/vis/scene/add/axes
+
+#draws wireframe
+/vis/viewer/set/style wireframe
+#more nice wireframe
+/vis/viewer/set/auxiliaryEdge true
+
+/vis/scene/add/axes 0.5 0.5 0.5
+
+/vis/geometry/set/colour l_outerTube 0 red
+/vis/geometry/set/colour l_cone 0 green

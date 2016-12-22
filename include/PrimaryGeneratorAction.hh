@@ -53,10 +53,12 @@ class B3PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     virtual void GeneratePrimaries(G4Event*);         
 
-    const G4GeneralParticleSource* GetParticleGun() const { return fParticleGun; }
+    const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+    //const G4GeneralParticleSource* GetParticleGun() const { return fParticleGun; }
   
   private:
-    G4GeneralParticleSource*  fParticleGun;
+    G4ParticleGun*  fParticleGun;
+    //G4GeneralParticleSource*  fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

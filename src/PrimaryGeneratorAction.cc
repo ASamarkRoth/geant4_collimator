@@ -40,6 +40,7 @@
 #include "G4ChargedGeantino.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,7 +49,7 @@ B3PrimaryGeneratorAction::B3PrimaryGeneratorAction()
    fParticleGun(0)
 {
 
-  fParticleGun  = new G4GeneralParticleSource();
+  fParticleGun  = new G4ParticleGun();
 
   // default particle kinematic
 
@@ -99,6 +100,30 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   z0 += dz0*(G4UniformRand()-0.5);
   fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   */
+
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  fParticleGun->SetParticleEnergy(661.7*keV);    
+
+  G4double cover = 0.1;
+  G4double r = cover*G4UniformRand();
+
+  G4double phi = G4UniformRand()*2*pi;
+
+  G4double ux = r*std::cos(phi);
+  G4double uy = r*std::sin(phi);
+  /*
+  G4double cosTheta = 2*G4UniformRand() - 1., phi = twopi*G4UniformRand();
+  G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
+  G4double ux = sinTheta*std::cos(phi),
+  uy = sinTheta*std::sin(phi),
+  uz = cosTheta;
+  */
+
+
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,1.));
             
   //create vertex
   //

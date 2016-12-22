@@ -45,6 +45,8 @@
 #include "G4VisAttributes.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Cons.hh"
+#include "G4PVReplica.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -86,6 +88,8 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   G4NistManager* data_mat = G4NistManager::Instance();
 
   G4Material* air_mat = data_mat->FindOrBuildMaterial("G4_AIR");
+  G4Material* lead_mat = data_mat->FindOrBuildMaterial("G4_Pb");
+  G4Material* copper_mat = data_mat->FindOrBuildMaterial("G4_Cu");
 
   //     
   // World
@@ -112,6 +116,44 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
                       0,                     //copy number
                       fCheckOverlaps);       // checking overlaps 
                  
+
+  // Create collimator
+  G4double innerR = 1*mm;
+  G4double outerR = 10.*cm;
+  G4double hz = 10.*cm;
+  G4double startAngle = 0.*deg;
+  G4double spanningAngle = 360.*deg;
+  
+  G4Tubs* s_outerTube = new G4Tubs("outerTube", innerR, outerR, 0.5*hz, startAngle, spanningAngle);
+
+  G4LogicalVolume* l_outerTube = new G4LogicalVolume(s_outerTube, lead_mat, "l_outerTube");
+
+  G4double z_translation = hz*0.5;
+  G4RotationMatrix rotation = G4RotationMatrix();
+
+  G4Transform3D transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
+
+  G4VPhysicalVolume* p_outerTube = new G4PVPlacement(transform, l_outerTube, "p_outerTube", logicWorld, 0, 0, fCheckOverlaps);
+
+  //The conical stuff
+
+  G4double inner_r_min, inner_r_max, outer_r_min, outer_r_max, cone_length;
+
+  G4int nbr_cones = 10;
+  cone_length = (G4double) hz/nbr_cones;
+
+  inner_r_min = inner_r_max = outer_r_min = innerR;
+  //outer_r_max = 10*mm;
+  outer_r_max = 1*mm;
+
+  G4Cons* s_cone = new G4Cons("s_cone", inner_r_min, inner_r_max, outer_r_min, outer_r_max, 0.5*cone_length, startAngle, spanningAngle);
+
+  G4LogicalVolume* l_cone = new G4LogicalVolume(s_cone, air_mat, "l_cone");
+
+  //G4VPhysicalVolume* p_cone = new G4PVPlacement(0, G4ThreeVector(0, 0, -10*cm), l_cone, "p_cone", logicWorld, 0, 0, fCheckOverlaps);
+
+  G4VPhysicalVolume* p_cones = new G4PVReplica("pr_cones", l_cone, l_outerTube, kZAxis, nbr_cones, cone_length);
+  
   // Print materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl; 
 
