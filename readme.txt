@@ -15,13 +15,13 @@ Use:
 	own macro?
 	multithreading?
 
-OBS: make sure that with a cone radius -> 0 -> simple hole it converges with a simple hole collimator
+OBS: make sure that with a cone radius -> 0 -> simple hole it converges to a simple hole collimator
 
 Use "advanced geometry"?
 Use radioactive source?
-Use GPS, general particle source
+Use GPS, general particle source #deemed too difficult concerning a directed beam!
 
 
 #Build project:
-cmake -DGeant4_DIR=/home/anton/Ebbe_programs/geant4/geant4.10.02.p02-install/lib/Geant4-10.2.2 /home/anton/Documents/PhD/geant4/project_course
+cmake -DGeant4_DIR=/home/anton/Ebbe_programs/geant4/geant4.10.02.p02-install/lib/Geant4-10.2.2 -DCMAKE_MODULE_PATH=/home/anton/Ebbe_programs/geant4/geant4.10.02.p02-install/lib/Geant4-10.2.2/Modules /home/anton/Documents/PhD/geant4/project_course
 

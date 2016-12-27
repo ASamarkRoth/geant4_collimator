@@ -68,6 +68,7 @@ int main(int argc,char** argv)
   //
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
+	runManager->SetNumberOfThreads(4);
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
@@ -78,6 +79,7 @@ int main(int argc,char** argv)
 	scoringManager->SetScoreWriter(new RE03UserScoreWriter());
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
   // Set mandatory initialization classes
   //
   runManager->SetUserInitialization(new B3DetectorConstruction);

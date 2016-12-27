@@ -59,7 +59,7 @@ B3PrimaryGeneratorAction::B3PrimaryGeneratorAction()
                     = particleTable->FindParticle("chargedgeantino");
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-  fParticleGun->SetParticleEnergy(1*eV);    
+  fParticleGun->SetParticleEnergy(1*eV);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   */
 }
@@ -78,11 +78,11 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   /*
   G4ParticleDefinition* particle = fParticleGun->GetParticleDefinition();
   if (particle == G4ChargedGeantino::ChargedGeantino()) {
-    //fluorine 
+    //fluorine
     G4int Z = 9, A = 18;
     G4double ionCharge   = 0.*eplus;
     G4double excitEnergy = 0.*keV;
-    
+
     G4ParticleDefinition* ion
        = G4IonTable::GetIonTable()->GetIon(Z,A,excitEnergy);
     fParticleGun->SetParticleDefinition(ion);
@@ -92,9 +92,9 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // randomized position
   //
   ///G4double x0  = 0*cm, y0  = 0*cm, z0  = 0*cm;
-  ///G4double dx0 = 0*cm, dy0 = 0*cm, dz0 = 0*cm;   
+  ///G4double dx0 = 0*cm, dy0 = 0*cm, dz0 = 0*cm;
   G4double x0  = 4*cm, y0  = 4*cm, z0  = 4*cm;
-  G4double dx0 = 1*cm, dy0 = 1*cm, dz0 = 1*cm; 
+  G4double dx0 = 1*cm, dy0 = 1*cm, dz0 = 1*cm;
   x0 += dx0*(G4UniformRand()-0.5);
   y0 += dy0*(G4UniformRand()-0.5);
   z0 += dz0*(G4UniformRand()-0.5);
@@ -105,10 +105,11 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-  fParticleGun->SetParticleEnergy(661.7*keV);    
+  fParticleGun->SetParticleEnergy(661.7*keV);
 
   G4double cover = 0.1;
-  G4double r = cover*G4UniformRand();
+	G4double random = G4UniformRand();
+  G4double r = cover*std::sqrt(random);
 
   G4double phi = G4UniformRand()*2*pi;
 
@@ -124,7 +125,7 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,1.));
-            
+
   //create vertex
   //
   fParticleGun->GeneratePrimaryVertex(anEvent);

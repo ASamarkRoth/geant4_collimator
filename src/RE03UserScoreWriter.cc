@@ -118,7 +118,11 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 	ofile << fNMeshSegments[0] << " " << fNMeshSegments[1] << " " << G4endl;
 
 	//Creating 2D-ROOT hist
-	if(opt.compare("root")==0) hist2D = new TH2D(fScoringMesh->GetWorldName(), msMapItr->first, fNMeshSegments[0], 0, fNMeshSegments[0], fNMeshSegments[1], 0, fNMeshSegments[1]);
+	if(opt.compare("root")==0) {
+		hist2D = new TH2D(fScoringMesh->GetWorldName(), msMapItr->first, fNMeshSegments[0], 0, fNMeshSegments[0], fNMeshSegments[1], 0, fNMeshSegments[1]);
+		hist2D->SetXTitle("x (bin)");
+		hist2D->SetYTitle("y (bin)");
+	}
 
 	// declare xy array
 	std::vector<double> projy;
@@ -141,12 +145,15 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 	} // x
 
 	// write quantity
+	int nbr_entries = 0;
 	ofile << std::setprecision(16); // for double value with 8 bytes
 	for(int x = 0; x < fNMeshSegments[0]; x++) {
 		for(int y = 0; y < fNMeshSegments[1]; y++) {
 
 			ofile << x << "," << y << ",";
 			ofile << projxy[x][y] << G4endl;
+
+			nbr_entries += projxy[x][y];
 
 			if(opt.compare("root")==0) hist2D->Fill(x, y, projxy[x][y]);
 
@@ -159,6 +166,7 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 
 	if(opt.compare("root")==0) {
 		//hist2D->Write();
+		hist2D->SetEntries(nbr_entries);
 		root_file->Write();
 	}
 
