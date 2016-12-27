@@ -1,5 +1,8 @@
+# $Id: CMakeLists.txt 94031 2015-11-05 11:54:38Z ihrivnac $
+
 #----------------------------------------------------------------------------
 # Setup the project
+#
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(collimator)
 
@@ -15,8 +18,14 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
-
 #----------------------------------------------------------------------------
+# Setup Geant4 include directories and compile definitions
+# Setup include directory for this project
+#
+include(${Geant4_USE_FILE})
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+#---------------------------------------------------------------------------
 # Find ROOT variables if the variable G4ANALYSIS_USE_ROOT is set
 #
 find_package(ROOT QUIET)
@@ -36,6 +45,7 @@ include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 message(STATUS "ROOT not found. Analysis disabled")
 endif()
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -47,36 +57,38 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(collimator collimator.cc ${sources} ${headers})
-
-if(ROOT_FOUND)
-target_link_libraries(collimator ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
-else()
 target_link_libraries(collimator ${Geant4_LIBRARIES})
-endif()
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build task3a. This is so that we can run the executable directly because it
+# build B3a. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-##set(EXAMPLEtask3a_SCRIPTS
-## vis.mac)
-##
-##foreach(_script ${EXAMPLEtask3a_SCRIPTS})
-##  configure_file(
-##    ${PROJECT_SOURCE_DIR}/${_script}
-##    ${PROJECT_BINARY_DIR}/${_script}
-##    COPYONLY
-##    )
-##endforeach()
+set(EXAMPLEB3_SCRIPTS
+  debug.mac
+  exampleB3.in
+  exampleB3.out
+  init_vis.mac
+  macros/run1.mac
+  macros/run2.mac
+  vis.mac
+  )
+
+foreach(_script ${EXAMPLEB3_SCRIPTS})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_script}
+    ${PROJECT_BINARY_DIR}/${_script}
+    COPYONLY
+    )
+endforeach()
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this
 # example standalone
 #
-#add_custom_target(task3a DEPENDS task3a)
+add_custom_target(B3a DEPENDS exampleB3a)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-#install(TARGETS task3a DESTINATION bin)
+install(TARGETS collimator DESTINATION bin )

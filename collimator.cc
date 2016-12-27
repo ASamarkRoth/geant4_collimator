@@ -47,6 +47,8 @@
 #include "G4UIExecutive.hh"
 #include "g4root.hh"
 
+//If uncommented then user defined dump to file is activated
+#include "RE03UserScoreWriter.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)

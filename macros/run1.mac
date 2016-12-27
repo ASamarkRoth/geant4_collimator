@@ -72,7 +72,9 @@
 
 #/score/drawProjection boxMesh_1 population
 #/score/drawProjection boxMesh_2 population
-/score/drawProjection collimator Edep_collimator
+#/score/drawProjection collimator Edep_collimator
+
+/score/dumpQuantityToFile boxMesh_2 population population2.txt
 
 #
 #/tracking/verbose 0
