@@ -29,9 +29,9 @@
 /// \brief Main program of the B3 example
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+	#include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+	#include "G4RunManager.hh"
 #endif
 
 #include "G4UImanager.hh"
@@ -47,7 +47,7 @@
 #include "G4UIExecutive.hh"
 #include "g4root.hh"
 
-//If uncommented then user defined dump to file is activated
+//If uncommented then user defined DumpQuantityToFile is activated
 #include "RE03UserScoreWriter.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,27 +63,31 @@ int main(int argc,char** argv)
   // Choose the Random engine
   //
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-     
+
   // Construct the default run manager
   //
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
 #else
   G4RunManager* runManager = new G4RunManager;
-#endif  
+#endif
 
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
+
+	//Uncomment for user defined score writer
+	scoringManager->SetScoreWriter(new RE03UserScoreWriter());
+
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   // Set mandatory initialization classes
   //
   runManager->SetUserInitialization(new B3DetectorConstruction);
   //
   runManager->SetUserInitialization(new B3PhysicsList);
-    
+
   // Set user action initialization
   //
-  runManager->SetUserInitialization(new B3aActionInitialization());  
-  
+  runManager->SetUserInitialization(new B3aActionInitialization());
+
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
@@ -96,13 +100,13 @@ int main(int argc,char** argv)
 
   // Process macro or start UI session
   //
-  if ( ! ui ) { 
+  if ( ! ui ) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
-  else { 
+  else {
     // interactive mode
     UImanager->ApplyCommand("/control/execute init_vis.mac");
     ui->SessionStart();
@@ -111,7 +115,7 @@ int main(int argc,char** argv)
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not be deleted 
+  // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
 
   delete visManager;

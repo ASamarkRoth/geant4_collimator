@@ -16,7 +16,8 @@
 
 /score/create/boxMesh boxMesh_1
 /score/mesh/boxSize 10. 10. 0.01 cm
-/score/mesh/nBin 100 100 5
+#/score/mesh/nBin 100 100 5
+/score/mesh/nBin 10 10 10
 /score/mesh/translate/xyz 0 0 120 mm
 
 #
@@ -70,11 +71,11 @@
 
 /run/beamOn 1000
 
-#/score/drawProjection boxMesh_1 population
+/score/drawProjection boxMesh_1 population
 #/score/drawProjection boxMesh_2 population
 #/score/drawProjection collimator Edep_collimator
 
-/score/dumpQuantityToFile boxMesh_2 population population2.txt
+/score/dumpQuantityToFile boxMesh_1 population population.txt ROOT
 
 #
 #/tracking/verbose 0

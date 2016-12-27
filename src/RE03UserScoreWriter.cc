@@ -39,9 +39,11 @@
 #include <map>
 #include <fstream>
 
+#include <string>
+
 //For ROOT option
 #ifdef G4ANALYSIS_USE_ROOT
-	#include "TObject.h"
+	#include "TString.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,13 +53,18 @@ RE03UserScoreWriter::RE03UserScoreWriter()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03UserScoreWriter::~RE03UserScoreWriter()
-{;}
+{
+	//delete root_file_name;
+	delete root_file;
+	delete hist2D;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
                                              const G4String & fileName,
                                              const G4String & option) {
 
+	G4cout << "Running modified DumpQuantityToFile" << G4endl;
   //
   if(verboseLevel > 0) {
     G4cout << "User-defined DumpQuantityToFile() method is invoked."
@@ -71,69 +78,90 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
   G4String opt = option;
   std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(tolower));
 
+	G4cout << "Option = " << option << G4endl;
+
   // confirm the option
   if(opt.size() == 0) opt = "csv";
 
-  // open the file
-  std::ofstream ofile(fileName);
-  if(!ofile) {
-    G4cerr << "ERROR : DumpToFile : File open error -> "
-           << fileName << G4endl;
-    return;
-  }
-  ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
+	if(opt.compare("root") == 0) G4cout << "Writing scorer to ROOT-file" << G4endl;
 
+	// open the file
+	if(opt.compare("root")==0) {
+		root_file_name = fileName;
+		std::size_t last_dot = root_file_name.find_last_of(".");
+		if(last_dot == std::string::npos) last_dot = root_file_name.size();
+		root_file_name = root_file_name.substr(0,last_dot)+".root";
+		root_file = new TFile(TString(root_file_name), "RECREATE");
+	}
+	std::ofstream ofile(fileName);
+	if(!ofile) {
+		G4cerr << "ERROR : DumpToFile : File open error -> "
+					 << fileName << G4endl;
+		return;
+	}
+	ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
 
-  // retrieve the map
-  MeshScoreMap scMap = fScoringMesh->GetScoreMap();
+	// retrieve the map
+	MeshScoreMap scMap = fScoringMesh->GetScoreMap();
 
-  MeshScoreMap::const_iterator msMapItr = scMap.find(psName);
-  if(msMapItr == scMap.end()) {
-    G4cerr << "ERROR : DumpToFile : Unknown quantity, \""
-           << psName << "\"." << G4endl;
-    return;
-  }
-  std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
-  ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
+	MeshScoreMap::const_iterator msMapItr = scMap.find(psName);
+	if(msMapItr == scMap.end()) {
+		G4cerr << "ERROR : DumpToFile : Unknown quantity, \""
+					 << psName << "\"." << G4endl;
+		return;
+	}
+	std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
+	ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
 
-  // write header info
-  ofile << "# xy projection" << G4endl;
-  ofile << fNMeshSegments[0] << " " << fNMeshSegments[1] << " " << G4endl;
+	// write header info
+	ofile << "# xy projection" << G4endl;
+	ofile << fNMeshSegments[0] << " " << fNMeshSegments[1] << " " << G4endl;
 
-  // declare xy array
-  std::vector<double> projy;
-  for(int y = 0; y < fNMeshSegments[1]; y++) projy.push_back(0.);
-  std::vector<std::vector<double> > projxy;
-  for(int x = 0; x < fNMeshSegments[0]; x++) projxy.push_back(projy);
-  // accumulate
-  ofile << std::setprecision(16); // for double value with 8 bytes
-  for(int x = 0; x < fNMeshSegments[0]; x++) {
-    for(int y = 0; y < fNMeshSegments[1]; y++) {
-      for(int z = 0; z < fNMeshSegments[2]; z++) {
+	//Creating 2D-ROOT hist
+	if(opt.compare("root")==0) hist2D = new TH2D(fScoringMesh->GetWorldName(), msMapItr->first, fNMeshSegments[0], 0, fNMeshSegments[0], fNMeshSegments[1], 0, fNMeshSegments[1]);
 
-        G4int idx = GetIndex(x, y, z);
+	// declare xy array
+	std::vector<double> projy;
+	for(int y = 0; y < fNMeshSegments[1]; y++) projy.push_back(0.);
+	std::vector<std::vector<double> > projxy;
+	for(int x = 0; x < fNMeshSegments[0]; x++) projxy.push_back(projy);
+	// accumulate
+	ofile << std::setprecision(16); // for double value with 8 bytes
+	for(int x = 0; x < fNMeshSegments[0]; x++) {
+		for(int y = 0; y < fNMeshSegments[1]; y++) {
+			for(int z = 0; z < fNMeshSegments[2]; z++) {
 
-        std::map<G4int, G4double*>::iterator value = score->find(idx);
-        if(value != score->end()) projxy[x][y] += *(value->second);
+				G4int idx = GetIndex(x, y, z);
 
-      } // z
-    } // y
-  } // x
+				std::map<G4int, G4double*>::iterator value = score->find(idx);
+				if(value != score->end()) projxy[x][y] += *(value->second);
 
-  // write quantity
-  ofile << std::setprecision(16); // for double value with 8 bytes
-  for(int x = 0; x < fNMeshSegments[0]; x++) {
-    for(int y = 0; y < fNMeshSegments[1]; y++) {
+			} // z
+		} // y
+	} // x
 
-      ofile << x << "," << y << ",";
-      ofile << projxy[x][y] << G4endl;
+	// write quantity
+	ofile << std::setprecision(16); // for double value with 8 bytes
+	for(int x = 0; x < fNMeshSegments[0]; x++) {
+		for(int y = 0; y < fNMeshSegments[1]; y++) {
 
-    } // y
-  } // x
-  ofile << std::setprecision(6);
+			ofile << x << "," << y << ",";
+			ofile << projxy[x][y] << G4endl;
 
-  // close the file
-  ofile.close();
+			if(opt.compare("root")==0) hist2D->Fill(x, y, projxy[x][y]);
+
+		} // y
+	} // x
+	ofile << std::setprecision(6);
+
+	// close the file
+	ofile.close();
+
+	if(opt.compare("root")==0) {
+		//hist2D->Write();
+		root_file->Write();
+	}
+
 
 }
 

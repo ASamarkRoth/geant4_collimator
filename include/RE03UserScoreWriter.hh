@@ -35,6 +35,15 @@
 #include "globals.hh"
 #include "G4VScoreWriter.hh"
 
+#include <string>
+
+//For ROOT option
+#ifdef G4ANALYSIS_USE_ROOT
+	#include "TFile.h"
+	#include "TObject.h"
+	#include "TH2.h"
+#endif
+
 // class description:
 //
 //  This class represents storing the scored quantity into a file.
@@ -48,10 +57,13 @@ public:
 
 public:
   // store a quantity into a file
-  virtual void DumpQuantityToFile(const G4String & psName, 
-                                  const G4String & fileName, 
+  virtual void DumpQuantityToFile(const G4String & psName,
+                                  const G4String & fileName,
                                   const G4String & option);
 
+	std::string root_file_name;
+	TFile* root_file;
+	TH2* hist2D;
 };
 
 #endif

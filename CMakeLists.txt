@@ -56,19 +56,27 @@ endif()
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build task3a. This is so that we can run the executable directly because it
+# build B3a. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-##set(EXAMPLEtask3a_SCRIPTS
-## vis.mac)
-##
-##foreach(_script ${EXAMPLEtask3a_SCRIPTS})
-##  configure_file(
-##    ${PROJECT_SOURCE_DIR}/${_script}
-##    ${PROJECT_BINARY_DIR}/${_script}
-##    COPYONLY
-##    )
-##endforeach()
+set(EXAMPLEB3_SCRIPTS
+  debug.mac
+  exampleB3.in
+  exampleB3.out
+  init_vis.mac
+  macros/run1.mac
+  macros/run2.mac
+  macros/visuals.mac
+  vis.mac
+  )
+
+foreach(_script ${EXAMPLEB3_SCRIPTS})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_script}
+    ${PROJECT_BINARY_DIR}/${_script}
+    COPYONLY
+    )
+endforeach()
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this
