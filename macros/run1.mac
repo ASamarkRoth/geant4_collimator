@@ -13,12 +13,11 @@
 
 # define scoring mesh
 #
-
 /score/create/boxMesh boxMesh_1
-/score/mesh/boxSize 10. 10. 0.01 cm
+/score/mesh/boxSize 10. 10. 1 cm
 #/score/mesh/nBin 100 100 5
-/score/mesh/nBin 100 100 1
-/score/mesh/translate/xyz 0 0 120 mm
+/score/mesh/nBin 100 100 1 
+/score/mesh/translate/xyz 0 0 100.1 mm
 
 #
 # define scorers and filters
@@ -69,14 +68,21 @@
 /score/close
 
 
-/run/beamOn 10000
+/run/beamOn 100000
 
 /score/drawProjection boxMesh_1 population
 #/score/drawProjection boxMesh_2 population
 #/score/drawProjection collimator Edep_collimator
 
 /score/dumpQuantityToFile boxMesh_1 population population.txt ROOT
+/score/dumpQuantityToFile boxMesh_1 fullE_population fullE_population.txt ROOT
 
+#/collimator/setConeOuterRadius 100
+#/collimator/update
+#
+#/run/beamOn 10000
+#
+#/score/dumpQuantityToFile boxMesh_1 population population2.txt ROOT
 #
 #/tracking/verbose 0
 #/run/beamOn 20

@@ -16,12 +16,12 @@
 #include "G4UImessenger.hh"
 
 class B3DetectorConstruction;
-/*
 class G4UIdirectory;
-class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter;
+/*
+class G4UIcmdWithAString;
+class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithABool;
 */
 
@@ -52,10 +52,10 @@ private:
 	B3DetectorConstruction*    detector;
 
   G4UIdirectory*             detDir;
+  G4UIcmdWithADoubleAndUnit* setConeOuterRadius;
+  G4UIcmdWithoutParameter*   updateCmd;
 	/*
   G4UIcmdWithABool*          sampleHolderCmd;
-  G4UIcmdWithADoubleAndUnit* calSourceDeadLayerCmd;
-  G4UIcmdWithoutParameter*   updateCmd;
   G4UIcmdWithAString*        configurationCmd;
   G4UIcmdWithABool*          solidFlagCmd;
   G4UIcmdWithABool*          XrayFlagCmd;

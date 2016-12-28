@@ -10,11 +10,11 @@
 #include "DetectorMessenger.hh"
 #include "DetectorConstruction.hh"
 
-/*
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+/*
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
 
 #include "G4RunManager.hh"
@@ -29,9 +29,21 @@ DetectorMessenger::DetectorMessenger(B3DetectorConstruction * det)
   :  detector(det)
 {
 
-  detDir = new G4UIdirectory("/collimator/geometry/");
-  detDir->SetGuidance("collimator dimension commands");
+  detDir = new G4UIdirectory("/collimator/");
+  detDir->SetGuidance("Collimator dimension commands");
 
+  setConeOuterRadius = new G4UIcmdWithADoubleAndUnit("/collimator/setConeOuterRadius",this);
+  setConeOuterRadius->SetGuidance("Set the outer radius of the cones within the collimator");
+  setConeOuterRadius->SetParameterName("Radius",false);
+  setConeOuterRadius->SetUnitCategory("Length");
+  setConeOuterRadius->SetDefaultUnit("mm");
+  setConeOuterRadius->AvailableForStates(G4State_Init, G4State_Idle);
+
+  updateCmd = new G4UIcmdWithoutParameter("/collimator/update",this);
+  updateCmd->SetGuidance("force to recompute geometry.");
+  updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  updateCmd->SetGuidance("if you changed geometrical value(s).");
+  updateCmd->AvailableForStates(G4State_Idle);
 	/*
   sampleHolderCmd = new G4UIcmdWithABool("/picospec/det/sampleHolder",this);
   sampleHolderCmd->SetGuidance("Select whether the radioactive sample holder is placed or not");
@@ -69,10 +81,16 @@ DetectorMessenger::DetectorMessenger(B3DetectorConstruction * det)
 
 DetectorMessenger::~DetectorMessenger()
 {
-;}
+	delete setConeOuterRadius;
+}
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
+  if ( command == setConeOuterRadius ) {
+		G4double radius = setConeOuterRadius->GetNewDoubleValue(newValue);
+    detector->SetConeOuterRadius(radius);
+	}
+
 	/*
   if(fDebug) G4cout<<__PRETTY_FUNCTION__<<G4endl;
 

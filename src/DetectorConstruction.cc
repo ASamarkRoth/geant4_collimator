@@ -47,7 +47,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Cons.hh"
 #include "G4PVReplica.hh"
-//#include <string>
+#include "globals.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,12 +57,16 @@ B3DetectorConstruction::B3DetectorConstruction()
   fCheckOverlaps(true)
 {
   DefineMaterials();
+	messenger = new DetectorMessenger(this);
+	outer_r_max = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3DetectorConstruction::~B3DetectorConstruction()
-{ }
+{
+	delete messenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,7 +112,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
                         air_mat,         //its material
                         "World");            //its name
 
-  G4VPhysicalVolume* physWorld =
+  physWorld =
     new G4PVPlacement(0,                     //no rotation
                       G4ThreeVector(),       //at (0,0,0)
                       logicWorld,            //its logical volume
@@ -119,11 +124,11 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 
   // Create collimator
-  G4double innerR = 1*mm;
-  G4double outerR = 10.*cm;
-  G4double hz = 10.*cm;
-  G4double startAngle = 0.*deg;
-  G4double spanningAngle = 360.*deg;
+  innerR = 1*mm;
+	outerR = 10.*cm;
+  hz = 10.*cm;
+  startAngle = 0.*deg;
+  spanningAngle = 360.*deg;
 
   G4Tubs* s_outerTube = new G4Tubs("outerTube", innerR, outerR, 0.5*hz, startAngle, spanningAngle);
   G4Tubs* s_outerTube2 = new G4Tubs("outerTube2", 0, outerR, 0.5*hz, startAngle, spanningAngle);
@@ -136,22 +141,20 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   G4Transform3D transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
 
-  //G4VPhysicalVolume* p_outerTube = new G4PVPlacement(transform, l_outerTube, "p_outerTube", logicWorld, 0, 0, fCheckOverlaps);
+  G4VPhysicalVolume* p_outerTube = new G4PVPlacement(transform, l_outerTube, "p_outerTube", logicWorld, 0, 0, fCheckOverlaps);
   //G4VPhysicalVolume* p_outerTube2 = new G4PVPlacement(transform, l_outerTube2, "p_outerTube2", logicWorld, 0, 0, fCheckOverlaps);
 
   //The conical stuff
-
-  G4double inner_r_min, inner_r_max, outer_r_min, outer_r_max, cone_length;
 
   G4int nbr_cones = 10;
   cone_length = hz/(G4double) nbr_cones;
 
   inner_r_min = inner_r_max = outer_r_min = innerR;
   //inner_r_min = outer_r_min = 0;
-  outer_r_max = 10*mm;
-  //outer_r_max = 1.001*mm;
+  if(outer_r_max < 0) outer_r_max = 10*mm;
+  //outer_r_max = 1.0000001*mm;
 
-  G4Cons* s_cone = new G4Cons("s_cone", inner_r_min, inner_r_max, outer_r_min, outer_r_max, 0.5*cone_length, startAngle, spanningAngle);
+  s_cone = new G4Cons("s_cone", inner_r_min, inner_r_max, outer_r_min, outer_r_max, 0.5*cone_length, startAngle, spanningAngle);
 
   G4LogicalVolume* l_cone = new G4LogicalVolume(s_cone, air_mat, "l_cone");
 
@@ -160,7 +163,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   for(int j=0;j<nbr_cones;j++) {
     G4String name = "p_cone"+std::to_string(j);
-    //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
+    new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
     G4cout << "Placement = " << G4ThreeVector(0, 0, (j+0.5)*cone_length)/cm << G4endl;
   }
 
@@ -199,3 +202,38 @@ void B3DetectorConstruction::ConstructSDandField()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+void B3DetectorConstruction::SetConeOuterRadius(G4double new_radius) {
+		//outer_r_max = new_radius;
+
+		s_cone->SetOuterRadiusPlusZ(new_radius);
+
+		G4RunManager::GetRunManager()->GeometryHasBeenModified();
+}
+
+// from the detector messenger you can force a geometry re-computation
+void B3DetectorConstruction::UpdateGeometry()
+{
+	G4RunManager* theRunManager = G4RunManager::GetRunManager();
+	//theRunManager->DefineWorldVolume(physWorld);
+	//theRunManager->GeometryHasBeenModified();
+	//Construct();
+	//theRunManager->ResetNavigator();
+
+	 // This ensures invocation of Construct() of user detector
+		 // construction in the master thread and invocation of
+			 // ConstructSDandField() in the worker threads. In addition it also
+				 // enforces GeometryHasBeenModified().
+					 //G4RunManager::GetRunManager()->ReinitializeGeometry();
+
+// Note that materials and sensitive detectors cannot be
+ // deleted. Thus the user has to set the pointers of
+	 // already-existing materials / sensitive detectors to the relevant
+		 // logical volumes.
+
+			 /* there is a "hard" way for VERY, VERY complex geometries were the
+						re-optimisation step may be extremely inefficient you can Open and
+								 close the geometry without notifying the RunManager via
+											GeometryHasBeenModified(). check Example 4.9. from the Chapter 4.
+													Detector Definition and Response. */
+}

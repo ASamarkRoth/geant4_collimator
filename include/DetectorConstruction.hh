@@ -36,10 +36,14 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4Cons;
+//class G4Box;
+
+#include "DetectorMessenger.hh"
 
 /// Detector construction class to define materials and geometry.
 ///
-/// Crystals are positioned in Ring, with an appropriate rotation matrix. 
+/// Crystals are positioned in Ring, with an appropriate rotation matrix.
 /// Several copies of Ring are placed in the full detector.
 
 class B3DetectorConstruction : public G4VUserDetectorConstruction
@@ -51,11 +55,22 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
   public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-               
+		void SetConeOuterRadius(G4double new_radius);
+		void UpdateGeometry();
+
   private:
     void DefineMaterials();
 
+		DetectorMessenger* messenger;
+		G4Cons* s_cone;
+		G4VPhysicalVolume* physWorld;
     G4bool  fCheckOverlaps;
+		G4double innerR;
+		G4double outerR;
+		G4double hz;
+		G4double startAngle;
+		G4double spanningAngle;
+  	G4double inner_r_min, inner_r_max, outer_r_min, outer_r_max, cone_length;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
