@@ -13,6 +13,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAnInteger.hh"
 /*
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
@@ -38,6 +39,11 @@ DetectorMessenger::DetectorMessenger(B3DetectorConstruction * det)
   setConeOuterRadius->SetUnitCategory("Length");
   setConeOuterRadius->SetDefaultUnit("mm");
   setConeOuterRadius->AvailableForStates(G4State_Init, G4State_Idle);
+
+  setNbrCones = new G4UIcmdWithAnInteger("/collimator/setNbrCones",this);
+  setNbrCones->SetGuidance("Set the number of cones within the collimator");
+  setNbrCones->SetParameterName("number",false);
+  setNbrCones->AvailableForStates(G4State_Init, G4State_Idle);
 
   updateCmd = new G4UIcmdWithoutParameter("/collimator/update",this);
   updateCmd->SetGuidance("force to recompute geometry.");
@@ -89,6 +95,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if ( command == setConeOuterRadius ) {
 		G4double radius = setConeOuterRadius->GetNewDoubleValue(newValue);
     detector->SetConeOuterRadius(radius);
+	}
+  if ( command == setNbrCones ) {
+		G4double count = setNbrCones->GetNewIntValue(newValue);
+    detector->SetNbrCones(count);
 	}
 
 	/*

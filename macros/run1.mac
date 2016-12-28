@@ -14,10 +14,10 @@
 # define scoring mesh
 #
 /score/create/boxMesh boxMesh_1
-/score/mesh/boxSize 10. 10. 1 cm
+/score/mesh/boxSize 2. 2. 0.1 cm
 #/score/mesh/nBin 100 100 5
-/score/mesh/nBin 100 100 1 
-/score/mesh/translate/xyz 0 0 100.1 mm
+/score/mesh/nBin 200 200 1 
+/score/mesh/translate/xyz 0 0 100.5 mm
 
 #
 # define scorers and filters
@@ -25,59 +25,39 @@
 /score/quantity/population population
 /score/filter/particle gammaFilter gamma
 
-/score/quantity/population fullE_population
-/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
-
-#
-/score/close
-#
-/score/create/boxMesh boxMesh_2
-/score/mesh/boxSize 10. 10. 0.01 cm
-/score/mesh/nBin 100 100 5
-/score/mesh/translate/xyz 0 0 500 mm
-
-#
-# define scorers and filters
-#
-/score/quantity/population population
+/score/quantity/flatSurfaceFlux flux 1
 /score/filter/particle gammaFilter gamma
 
-/score/quantity/population fullE_population
-/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
-
-#
-/score/close
-#
-/score/create/cylinderMesh collimator
-/score/mesh/cylinderSize 10. 5. cm
-/score/mesh/nBin 1 10 1
-/score/mesh/translate/xyz 0 0 50 mm
-
-#
-# define scorers and filters
-#
-/score/quantity/population population
-/score/filter/particle gammaFilter gamma
 
 /score/quantity/population fullE_population
 /score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
 
-/score/quantity/energyDeposit Edep_collimator
+/score/quantity/flatSurfaceFlux fullE_flux 1
+/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
 
+#/collimator/setConeOuterRadius 2
+#/run/initialize
+#/run/beamOn 100000
+
+#/score/drawProjection boxMesh_1 population
+
+#/score/dumpQuantityToFile boxMesh_1 flux results/beam.txt ROOT
+#/score/dumpQuantityToFile boxMesh_1 fullE_flux results/fullE_beam.txt ROOT
+
+#Setting macro path to created folder
+/control/macroPath /home/anton/Documents/PhD/geant4/project_course/macros
+
+#Executing my own visual settings
+/control/foreach loop.mac counter 1 2 4 6 10
+
+#Change radius test
+#/collimator/setConeOuterRadius 20
+#/run/initialize
 #
-/score/close
+#/run/beamOn 100000
+#/score/dumpQuantityToFile boxMesh_1 population population2.txt ROOT
+#/score/dumpQuantityToFile boxMesh_1 fullE_population fullE_population2.txt ROOT
 
-
-/run/beamOn 100000
-
-/score/drawProjection boxMesh_1 population
-#/score/drawProjection boxMesh_2 population
-#/score/drawProjection collimator Edep_collimator
-
-/score/dumpQuantityToFile boxMesh_1 population population.txt ROOT
-/score/dumpQuantityToFile boxMesh_1 fullE_population fullE_population.txt ROOT
-
-#/collimator/setConeOuterRadius 100
 #/collimator/update
 #
 #/run/beamOn 10000

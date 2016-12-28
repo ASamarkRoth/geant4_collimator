@@ -54,7 +54,8 @@
 
 B3DetectorConstruction::B3DetectorConstruction()
 : G4VUserDetectorConstruction(),
-  fCheckOverlaps(true)
+  fCheckOverlaps(true),
+	modification(false)
 {
   DefineMaterials();
 	messenger = new DetectorMessenger(this);
@@ -146,8 +147,11 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   //The conical stuff
 
-  G4int nbr_cones = 10;
-  cone_length = hz/(G4double) nbr_cones;
+	if(!modification) {
+		nbr_cones = 1;
+		cone_length = hz/(G4double) nbr_cones;
+	}
+	modification = false;
 
   inner_r_min = inner_r_max = outer_r_min = innerR;
   //inner_r_min = outer_r_min = 0;
@@ -204,18 +208,30 @@ void B3DetectorConstruction::ConstructSDandField()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 void B3DetectorConstruction::SetConeOuterRadius(G4double new_radius) {
-		//outer_r_max = new_radius;
 
 		s_cone->SetOuterRadiusPlusZ(new_radius);
 
+		G4cout << "The outer cone radius was modified to " << new_radius/mm << " mm" << G4endl;
+
 		G4RunManager::GetRunManager()->GeometryHasBeenModified();
+}
+void B3DetectorConstruction::SetNbrCones(G4double new_count) {
+
+  cone_length = hz/(G4double) new_count;
+	nbr_cones = new_count;
+	modification = true;
+
+	G4cout << "Number of cones was modified to " << new_count << G4endl;
+
+	G4RunManager::GetRunManager()->DefineWorldVolume(physWorld);
+	G4RunManager::GetRunManager()->GeometryHasBeenModified();
+	//Construct();
 }
 
 // from the detector messenger you can force a geometry re-computation
 void B3DetectorConstruction::UpdateGeometry()
 {
 	G4RunManager* theRunManager = G4RunManager::GetRunManager();
-	//theRunManager->DefineWorldVolume(physWorld);
 	//theRunManager->GeometryHasBeenModified();
 	//Construct();
 	//theRunManager->ResetNavigator();

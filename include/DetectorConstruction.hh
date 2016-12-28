@@ -56,11 +56,14 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
 		void SetConeOuterRadius(G4double new_radius);
+		void SetNbrCones(G4double new_count);
 		void UpdateGeometry();
 
   private:
     void DefineMaterials();
 
+		G4int nbr_cones;
+		G4bool modification;
 		DetectorMessenger* messenger;
 		G4Cons* s_cone;
 		G4VPhysicalVolume* physWorld;

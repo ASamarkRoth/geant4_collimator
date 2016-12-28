@@ -19,6 +19,7 @@ class B3DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithAnInteger;
 /*
 class G4UIcmdWithAString;
 class G4UIcmdWith3VectorAndUnit;
@@ -54,6 +55,7 @@ private:
   G4UIdirectory*             detDir;
   G4UIcmdWithADoubleAndUnit* setConeOuterRadius;
   G4UIcmdWithoutParameter*   updateCmd;
+	G4UIcmdWithAnInteger* 		 setNbrCones;
 	/*
   G4UIcmdWithABool*          sampleHolderCmd;
   G4UIcmdWithAString*        configurationCmd;
