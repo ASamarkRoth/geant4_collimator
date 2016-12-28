@@ -139,6 +139,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   G4double z_translation = hz*0.5;
   G4RotationMatrix rotation = G4RotationMatrix();
+	rotation.rotateY(180*deg);
 
   G4Transform3D transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
 
@@ -148,14 +149,14 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   //The conical stuff
 
 	if(!modification) {
-		nbr_cones = 1;
+		nbr_cones = 5;
 		cone_length = hz/(G4double) nbr_cones;
 	}
 	modification = false;
 
   inner_r_min = inner_r_max = outer_r_min = innerR;
   //inner_r_min = outer_r_min = 0;
-  if(outer_r_max < 0) outer_r_max = 10*mm;
+  if(outer_r_max < 0) outer_r_max = 2*mm;
   //outer_r_max = 1.0000001*mm;
 
   s_cone = new G4Cons("s_cone", inner_r_min, inner_r_max, outer_r_min, outer_r_max, 0.5*cone_length, startAngle, spanningAngle);
