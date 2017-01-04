@@ -5,6 +5,6 @@
 
 /run/beamOn 100000
 
-/score/dumpQuantityToFile boxMesh_1 flux results/L100R{counter}.txt ROOT
-/score/dumpQuantityToFile boxMesh_1 fullE_flux results/fullE_L100R{counter}.txt ROOT
+/score/dumpQuantityToFile boxMesh_1 flux results/FL100R{counter}.txt ROOT
+/score/dumpQuantityToFile boxMesh_1 fullE_flux results/fullE_FL100R{counter}.txt ROOT
 
