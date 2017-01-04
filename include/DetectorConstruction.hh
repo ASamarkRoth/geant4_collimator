@@ -37,6 +37,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4Cons;
+class G4Tubs;
 //class G4Box;
 
 #include "DetectorMessenger.hh"
@@ -57,16 +58,25 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
     virtual void ConstructSDandField();
 		void SetConeOuterRadius(G4double new_radius);
 		void SetNbrCones(G4double new_count);
+		void SetCylIncR(G4double constant);
 		void UpdateGeometry();
+		G4LogicalVolume* GetLogicWorld();
 
   private:
     void DefineMaterials();
 
 		G4int nbr_cones;
+		G4int nbr_cyls;
 		G4bool modification;
 		DetectorMessenger* messenger;
 		G4Cons* s_cone;
+		G4Tubs* s_cyls;
+		G4LogicalVolume* l_cyls;
+
 		G4VPhysicalVolume* physWorld;
+  	G4LogicalVolume* logicWorld;
+
+  	G4LogicalVolume* l_outerTube;
     G4bool  fCheckOverlaps;
 		G4double innerR;
 		G4double outerR;
@@ -74,6 +84,8 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
 		G4double startAngle;
 		G4double spanningAngle;
   	G4double inner_r_min, inner_r_max, outer_r_min, outer_r_max, cone_length;
+		G4double cyl_length;
+		G4double incR;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

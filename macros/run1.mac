@@ -36,10 +36,10 @@
 /score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
 
 #/collimator/setConeOuterRadius 2
-/run/initialize
-/run/beamOn 100
+#/run/initialize
+#/run/beamOn 100
 
-/score/drawProjection boxMesh_1 population
+#/score/drawProjection boxMesh_1 population
 
 #/score/dumpQuantityToFile boxMesh_1 flux results/beam.txt ROOT
 #/score/dumpQuantityToFile boxMesh_1 fullE_flux results/fullE_beam.txt ROOT
@@ -49,6 +49,7 @@
 
 #Executing my own visual settings
 #/control/foreach loop.mac counter 1 2 4 6 10
+/control/foreach loop2.mac counter 0 0.05 0.1 0.5 1
 
 #Change radius test
 #/collimator/setConeOuterRadius 20

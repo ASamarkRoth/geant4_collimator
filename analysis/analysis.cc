@@ -15,8 +15,12 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-	double R[5] = {1, 2, 4, 6, 10};
-	double L[5] = {10, 20, 33, 50, 100};
+	int i_max = 4;
+	int j_max = 5;
+	//double R[5] = {1, 2, 4, 6, 10};
+	//double R[5] = {0, 0.05, 0.1, 0.5, 1};
+	string R[5] = {"0", "0.05", "0.1", "0.5", "1"};
+	double L[5] = {5, 10, 20, 50, 100};
 
 	int full[5][5];
 	int all[5][5];
@@ -38,10 +42,11 @@ int main(int argc, char** argv) {
 	//Box size = 20x20 mm², nbr_bins = 200 -> bin_width=0.1 mm and bin_area = 0.01 mm² = 1e-4 cm² = 0.0001 cm²
 	double factor = 0.0001;
 
-	for(int i=0;i<5;i++) {
-		for(int j=0;j<5;j++) {
-			file_name = "FL"+to_string(int(L[i]))+"R"+to_string(int(R[j]))+".root";
-			//cout << file_name << endl;
+	for(int i=0;i<i_max;i++) {
+		for(int j=0;j<j_max;j++) {
+			//file_name = "CylFL"+to_string(int(L[i]))+"R"+to_string(R[j])+".root";
+			file_name = "CylFL"+to_string(int(L[i]))+"R"+R[j]+".root";
+			cout << file_name << endl;
 			root_file = new TFile(TString(PWD+file_name));
 			hist = (TH2D*) root_file->Get("boxMesh_1");
 			if(!hist) cout << "Histogram not found"<<endl;
@@ -56,6 +61,9 @@ int main(int argc, char** argv) {
 			all[i][j] = hist->GetEntries();
 
 			file_name = "fullE_"+file_name;
+			//file_name = "CylfullE_FL"+to_string(int(L[i]))+"R"+to_string(int(R[j]))+".root";
+			file_name = "CylfullE_FL"+to_string(int(L[i]))+"R"+R[j]+".root";
+			cout << file_name << endl;
 			root_file = new TFile(TString(PWD+file_name));
 			hist = (TH2D*) root_file->Get("boxMesh_1");
 			if(!hist) cout << "Histogram not found"<<endl;
@@ -65,14 +73,14 @@ int main(int argc, char** argv) {
 			scatter[i][j] = (double) full[i][j]/all[i][j];
 			sigma[i][j] = (hist->GetStdDev()+hist->GetStdDev(2))/2;
 		}
-		g_scatter = new TGraph(5, R, scatter[i]);
-		g_scatter->SetName(TString(file_name));
+		//g_scatter = new TGraph(5, R, scatter[i]);
+		//g_scatter->SetName(TString(file_name));
 	}
 
 	cout << "AllE = np.asarray([[";
-	for(int i=0;i<5;i++) {
+	for(int i=0;i<i_max;i++) {
 		if(i > 0) cout << "[";
-		for(int j=0;j<5;j++) {
+		for(int j=0;j<j_max;j++) {
 			cout << all[i][j];
 			if(j < 4) cout << ", ";
 		}
@@ -82,9 +90,9 @@ int main(int argc, char** argv) {
 	cout << "])" << endl;
 
 	cout << "FullE = np.asarray([[";
-	for(int i=0;i<5;i++) {
+	for(int i=0;i<i_max;i++) {
 		if(i > 0) cout << "[";
-		for(int j=0;j<5;j++) {
+		for(int j=0;j<j_max;j++) {
 			cout << full[i][j];
 			if(j < 4) cout << ", ";
 		}
@@ -94,9 +102,9 @@ int main(int argc, char** argv) {
 	cout << "])" << endl;
 
 	cout << "sigma = np.asarray([[";
-	for(int i=0;i<5;i++) {
+	for(int i=0;i<i_max;i++) {
 		if(i > 0) cout << "[";
-		for(int j=0;j<5;j++) {
+		for(int j=0;j<j_max;j++) {
 			cout << sigma[i][j];
 			if(j < 4) cout << ", ";
 		}
@@ -104,8 +112,6 @@ int main(int argc, char** argv) {
 		if(i < 4) cout << ", " << endl;
 	}
 	cout << "])" << endl;
-
-	cout << g_scatter->GetMean() << endl;
 
 	int a[3];
 	int b[3];

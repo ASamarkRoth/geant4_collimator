@@ -14,6 +14,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADouble.hh"
 /*
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
@@ -39,6 +40,11 @@ DetectorMessenger::DetectorMessenger(B3DetectorConstruction * det)
   setConeOuterRadius->SetUnitCategory("Length");
   setConeOuterRadius->SetDefaultUnit("mm");
   setConeOuterRadius->AvailableForStates(G4State_Init, G4State_Idle);
+
+  setIncR = new G4UIcmdWithADouble("/collimator/setIncR",this);
+  setIncR->SetGuidance("Set increase constant within the cylinders collimator");
+  setIncR->SetParameterName("number",false);
+  setIncR->AvailableForStates(G4State_Init, G4State_Idle);
 
   setNbrCones = new G4UIcmdWithAnInteger("/collimator/setNbrCones",this);
   setNbrCones->SetGuidance("Set the number of cones within the collimator");
@@ -99,6 +105,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if ( command == setNbrCones ) {
 		G4double count = setNbrCones->GetNewIntValue(newValue);
     detector->SetNbrCones(count);
+	}
+  if ( command == setIncR ) {
+		G4double count = setIncR->GetNewDoubleValue(newValue);
+    detector->SetCylIncR(count);
 	}
 
 	/*

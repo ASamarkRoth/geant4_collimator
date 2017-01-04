@@ -49,6 +49,7 @@
 #include "G4PVReplica.hh"
 #include "globals.hh"
 #include "G4RunManager.hh"
+#include "G4TouchableHistory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -108,7 +109,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
     new G4Box("World",                       //its name
        0.5*world_sizeXY, 0.5*world_sizeXY, 0.5*world_sizeZ); //its size
 
-  G4LogicalVolume* logicWorld =
+  logicWorld =
     new G4LogicalVolume(solidWorld,          //its solid
                         air_mat,         //its material
                         "World");            //its name
@@ -126,6 +127,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   // Create collimator
   innerR = 1*mm;
+  innerR = 0*mm;
 	outerR = 10.*cm;
   hz = 10.*cm;
   startAngle = 0.*deg;
@@ -134,7 +136,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   G4Tubs* s_outerTube = new G4Tubs("outerTube", innerR, outerR, 0.5*hz, startAngle, spanningAngle);
   G4Tubs* s_outerTube2 = new G4Tubs("outerTube2", 0, outerR, 0.5*hz, startAngle, spanningAngle);
 
-  G4LogicalVolume* l_outerTube = new G4LogicalVolume(s_outerTube, lead_mat, "l_outerTube");
+  l_outerTube = new G4LogicalVolume(s_outerTube, lead_mat, "l_outerTube");
   G4LogicalVolume* l_outerTube2 = new G4LogicalVolume(s_outerTube2, lead_mat, "l_outerTube2");
 
   G4double z_translation = hz*0.5;
@@ -165,11 +167,33 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 
   G4cout << "Cone info: cone_length (cm) = "<<cone_length/cm<<" nbr_cones = "<<nbr_cones<<G4endl;
+	G4String name;
 
   for(int j=0;j<nbr_cones;j++) {
-    G4String name = "p_cone"+std::to_string(j);
-    new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
-    G4cout << "Placement = " << G4ThreeVector(0, 0, (j+0.5)*cone_length)/cm << G4endl;
+    name = "p_cone"+std::to_string(j);
+    //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
+    //G4cout << "Placement = " << G4ThreeVector(0, 0, (j+0.5)*cone_length)/cm << G4endl;
+  }
+
+
+	//Cylinders instead of cones
+  innerR = 0*mm;
+  hz = 10.*cm;
+  startAngle = 0.*deg;
+  spanningAngle = 360.*deg;
+
+	nbr_cyls = 2;
+	cyl_length = hz/(G4double) nbr_cyls;
+
+	incR = 0.1;
+
+  for(int j=0;j<nbr_cyls;j++) {
+		outerR = (incR*j+1)*mm;
+    name = "cyl_"+std::to_string(j);
+		s_cyls = new G4Tubs(G4String("s_"+name), innerR, outerR, 0.5*cyl_length, startAngle, spanningAngle);
+    l_cyls = new G4LogicalVolume(s_cyls, air_mat, G4String("l_"+name));
+    new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cyl_length), l_cyls, G4String("p_"+name), l_outerTube, 0, 0, fCheckOverlaps);
+    G4cout << "Placement = " << G4ThreeVector(0, 0, (j+0.5)*cyl_length)/cm << G4endl;
   }
 
   //G4VPhysicalVolume* p_cones = new G4PVReplica("pr_cones", l_cone, l_outerTube, kZAxis, nbr_cones, cone_length);
@@ -216,6 +240,15 @@ void B3DetectorConstruction::SetConeOuterRadius(G4double new_radius) {
 
 		G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
+void B3DetectorConstruction::SetCylIncR(G4double constant) {
+
+	for(int j = 0; j < nbr_cyls; j++) {
+		G4Tubs* s_current = (G4Tubs*) l_outerTube->GetDaughter(j)->GetLogicalVolume()->GetSolid();
+		s_current->SetOuterRadius((j*constant+1)*mm);
+		//s_current->DumpInfo();
+	}
+	G4RunManager::GetRunManager()->GeometryHasBeenModified();
+}
 void B3DetectorConstruction::SetNbrCones(G4double new_count) {
 
   cone_length = hz/(G4double) new_count;
@@ -253,4 +286,8 @@ void B3DetectorConstruction::UpdateGeometry()
 								 close the geometry without notifying the RunManager via
 											GeometryHasBeenModified(). check Example 4.9. from the Chapter 4.
 													Detector Definition and Response. */
+}
+
+G4LogicalVolume* B3DetectorConstruction::GetLogicWorld() {
+	return logicWorld;
 }
