@@ -25,13 +25,14 @@ int main(int argc, char** argv) {
 
 	//TGraph* g_scatter[5];
 	TGraph* g_scatter;
-int nbr_gammas = 0;
+	int nbr_gammas = 0;
 //Box size = 20x20 mm², nbr_bins = 200 -> bin_width=0.1 mm and bin_area = 0.01 mm² = 1e-4 cm² = 0.0001 cm²
 	double factor = 0.0001;
 
 	const int runs = 2;
 
 	string file_name[runs] = {"simple1mm.root", "simple1.5mm.root"};
+	//string file_name[runs] = {"simple1mm.root", "simple1.5mm.root", "cones.root", "cylinders.root"};
 	string temp;
 
 	double all[runs];
@@ -75,26 +76,33 @@ int nbr_gammas = 0;
 
 	for(int i=0; i<runs; i++) {
 		g_scatter = new TGraph(1, &std_dev[i] ,&efficiency[i]);
-		g_scatter->SetName(TString(i));
+		g_scatter->SetName(TString(to_string(i)));
 		g_scatter->SetMarkerStyle(marker_style[i]);
 		g_scatter->SetMarkerSize(marker_size[i]);
-		g_scatter->SetMarkerColor(marker_colour[i].GetNumber());
+		g_scatter->SetMarkerColor(marker_colour[i].GetNumber());//A colour number is used when the colour is defined.
 		if(i == 0) {
+			g_scatter->Draw("AP"); //For the first one, one needs to draw axis with "A". Option "SAME" is not needed with TGraph!
+			//Axis objects for TGraph are created after it has been drawn, thus they need to be defined here.
 			g_scatter->GetYaxis()->SetTitle("Scattering efficiency");
 			g_scatter->GetXaxis()->SetTitle("Divergence, StdDev (mm)");
-			g_scatter->Draw("AP");
+			g_scatter->GetYaxis()->CenterTitle();
+			g_scatter->GetXaxis()->CenterTitle();
+			//g_scatter->GetYaxis()->SetLimits(0.8, 1.1);
+			g_scatter->SetMinimum(0.8); //This is how to set the limits on a TGraph (y-axis)
+			g_scatter->SetMaximum(1.1);
+			g_scatter->GetXaxis()->SetLimits(0.6, 2);
 		}
 		else {
 			g_scatter->Draw("P");
 		}
-		leg->AddEntry(TString(i),legend_labels[i],"p");
+		cout << g_scatter->GetName() << endl;
+		leg->AddEntry(g_scatter->GetName(),legend_labels[i],"p");
 	}
+
 
 	leg->Draw();
 
+	C->Update();
+
 	C->Write();
-
-
-
-
 }
