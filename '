@@ -127,7 +127,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 
   // Create collimator
-  innerR = 1.5*mm;
+  innerR = 1*mm;
   //innerR = 0*mm; //for cylinders
 	outerR = 10.*cm;
   hz = 10.*cm;
@@ -160,6 +160,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   //inner_r_min = outer_r_min = 0;
   if(outer_r_max < 0) outer_r_max = 2*mm;
   //outer_r_max = 1.0000001*mm;
+	outer_r_max = 1*mm;
 
   s_cone = new G4Cons("s_cone", inner_r_min, inner_r_max, outer_r_min, outer_r_max, 0.5*cone_length, startAngle, spanningAngle);
 
@@ -171,7 +172,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   for(int j=0;j<nbr_cones;j++) {
     name = "p_cone"+std::to_string(j);
-    //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
+    new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
     //G4cout << "Placement = " << G4ThreeVector(0, 0, (j+0.5)*cone_length)/cm << G4endl;
   }
 
@@ -213,13 +214,13 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 
 	//crystal_"detector"
-	hx = hy = 5*cm;
+	hx = hy = 50*cm;
 	hz = 1*mm;
 
 	s_crystalBox = new G4Box("s_crystalBox", 0.5*hx, 0.5*hy, 0.5*hz);
 	l_crystalBox = new G4LogicalVolume(s_crystalBox, air_mat, "l_crystalBox");
 
-  z_translation = 15*cm+hz*0.5;
+  z_translation = 10*cm+hz*0.5;
   rotation = G4RotationMatrix();
   transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
   p_crystalBox = new G4PVPlacement(transform, l_crystalBox, "p_crystalBox", logicWorld, 0, 0, fCheckOverlaps);

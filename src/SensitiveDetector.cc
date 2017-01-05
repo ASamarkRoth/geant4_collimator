@@ -76,13 +76,19 @@ G4bool SensitiveDetector::ProcessHits(G4Step* step,
 	G4String particleName = cur_track->GetDefinition()->GetParticleName();
 
 	if(particleName.compare("gamma") == 0 && pre_step_vol_name.compare(post_step_vol_name) != 0) {
-		G4cout << "##############################################" << G4endl;
-		G4cout << "Particle name is " << particleName << G4endl;
-		G4cout << "pre_step volume name is " << pre_step->GetTouchable()->GetVolume()->GetName() << G4endl;
-		G4cout << "post_step volume name is " << post_step->GetTouchable()->GetVolume()->GetName() << G4endl;
-		G4cout << "E_tot = " << cur_track->GetTotalEnergy() << G4endl;
+		//G4cout << "##############################################" << G4endl;
+		//G4cout << "Particle name is " << particleName << G4endl;
+		//G4cout << "pre_step volume name is " << pre_step->GetTouchable()->GetVolume()->GetName() << G4endl;
+		//G4cout << "post_step volume name is " << post_step->GetTouchable()->GetVolume()->GetName() << G4endl;
+		//G4cout << "E_tot = " << cur_track->GetTotalEnergy() << G4endl;
 
-		analysisManager->FillH1(0, cur_track->GetTotalEnergy()/keV);
+		//G4cout << "Name of sensitive: " << this->GetName() << G4endl;
+		if(this->GetName().compare("Det_directBox") == 0) {
+			analysisManager->FillH1(0, cur_track->GetTotalEnergy()/keV);
+		}
+		if(this->GetName().compare("Det_crystalBox") == 0) {
+			analysisManager->FillH1(1, cur_track->GetTotalEnergy()/keV);
+		}
 
 	}
 

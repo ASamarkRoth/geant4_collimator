@@ -83,12 +83,17 @@ void B3aRunAction::BeginOfRunAction(const G4Run* run)
 
 	auto analysisManager = G4AnalysisManager::Instance();
 
-	analysisManager->OpenFile("spectrum");
+	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/results/spec_simple1.5mm.root");
 
 	//directBox
 	analysisManager->CreateH1("directBox", "Energy at end of collimator", 1000, 0, 1000);
 	analysisManager->SetH1XAxisTitle(0, "Energy (keV)");
 	analysisManager->SetH1YAxisTitle(0, "Counts");
+
+	//directBox
+	analysisManager->CreateH1("crystalBox", "Energy at end of collimator", 1000, 0, 1000);
+	analysisManager->SetH1XAxisTitle(1, "Energy (keV)");
+	analysisManager->SetH1YAxisTitle(1, "Counts");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

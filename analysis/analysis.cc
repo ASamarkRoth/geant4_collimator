@@ -34,7 +34,6 @@ int main(int argc, char** argv) {
 	string file_name;
 	TFile* root_file;
 	TH2D* hist;
-	TFile* write_file = new TFile("analysis.root", "RECREATE");
 
 	//TGraph* g_scatter[5];
 	TGraph* g_scatter;
@@ -121,7 +120,8 @@ int main(int argc, char** argv) {
 		b[j]=j;
 	}
 
-	//TGraph* bajs = new TGraph(3, a, b);
+	TFile* write_file = new TFile("analysis.root", "RECREATE");
+	TGraph* bajs = new TGraph(3, a, b);
 	//bajs->Draw();
 	cout << scatter[0] << endl;
 	for(int j=0;j<1;j++) {
@@ -130,10 +130,11 @@ int main(int argc, char** argv) {
 	}
 	//theCanvas->Update();
 
+	bajs->Write();
 	write_file->Write();
 
-	delete root_file;
-	delete write_file;
+	//delete root_file;
+	//delete write_file;
 
 	//delete g_scatter;
 	return 0;

@@ -7,13 +7,57 @@
 #/run/numberOfWorkers 4
 /run/initialize
 #
-/control/verbose 2
+# define scoring mesh
 #
-/run/beamOn 40000
-#
-# change beta source
-#
-/gun/particle ion
-/gun/ion 6 11
-#
-/run/beamOn 40000
+#/score/create/boxMesh directBox_mesh
+#/score/mesh/boxSize 2. 2. 0.1 cm
+#/score/mesh/nBin 200 200 1 
+#/score/mesh/translate/xyz 0 0 100.5 mm
+
+#/score/create/boxMesh directBox_mesh
+#/score/mesh/boxSize 50. 50. 0.1 cm
+#/score/mesh/nBin 500 500 1 
+#/score/mesh/translate/xyz 0 0 100.5 mm
+
+/score/create/boxMesh crystal_mesh
+/score/mesh/boxSize 25. 25. 0.1 mm #size is half the value given!!!
+/score/mesh/nBin 500 500 1 
+/score/mesh/translate/xyz 0 0 150.05 mm
+
+# define scorers and filters
+
+/score/quantity/population population
+/score/filter/particle gammaFilter gamma
+
+/score/quantity/flatSurfaceFlux flux 1
+/score/filter/particle gammaFilter gamma
+
+/score/quantity/population fullE_population
+/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
+
+/score/quantity/flatSurfaceFlux fullE_flux 1
+/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
+
+
+/score/quantity/flatSurfaceCurrent current 1 true false
+/score/filter/particle gammaFilter gamma
+
+/score/quantity/flatSurfaceCurrent current_full 1 true false
+/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
+
+
+/run/beamOn 1000000
+/score/drawProjection crystal_mesh current
+
+/score/dumpQuantityToFile crystal_mesh current ../2nd_analysis/results/simple1.5mm.txt ROOT
+/score/dumpQuantityToFile crystal_mesh current_full ../2nd_analysis/results/full_simple1.5mm.txt ROOT
+
+#/score/dumpQuantityToFile directBox_mesh current results/simple1.5mm.txt ROOT
+#/score/dumpQuantityToFile directBox_mesh current_full results/full_simple1.5mm.txt ROOT
+
+#Setting macro path to created folder
+/control/macroPath /home/anton/Documents/PhD/geant4/project_course/macros
+
+#Executing my own visual settings
+#/control/foreach loop.mac counter 1 2 4 6 10
+#/control/foreach loop2.mac counter 0 0.05 0.1 0.5 1
