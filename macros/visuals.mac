@@ -8,3 +8,4 @@
 
 /vis/geometry/set/colour l_outerTube 0 red
 /vis/geometry/set/colour l_cone 0 blue
+/vis/geometry/set/colour l_directBox 0 green

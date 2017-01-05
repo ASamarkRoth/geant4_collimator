@@ -200,8 +200,19 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   //G4VPhysicalVolume* p_cones = new G4PVReplica("pr_cones", l_cone, l_outerTube, kZAxis, nbr_cones, cone_length);
   //G4VPhysicalVolume* p_cones = new G4PVReplica("pr_cones", l_cone, logicWorld, kZAxis, 100, cone_length);
 
-  // Print materials
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+	//First direct box shaped detector
+	hx = hy = 2*cm;
+	hz = 1*mm;
+
+	s_directBox = new G4Box("s_directBox", 0.5*hx, 0.5*hy, 0.5*hz);
+	l_directBox = new G4LogicalVolume(s_directBox, air_mat, "l_directBox");
+
+  z_translation = 10*cm+hz*0.5;
+  rotation = G4RotationMatrix();
+  transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
+  p_directBox = new G4PVPlacement(transform, l_directBox, "p_directBox", logicWorld, 0, 0, fCheckOverlaps);
+
+
 
   //always return the physical World
   //
@@ -214,7 +225,11 @@ void B3DetectorConstruction::ConstructSDandField()
 {
   G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
-	SensitiveDetector* directBox = new SensitiveDetector("directBox");
+	SensitiveDetector* Det_directBox = new SensitiveDetector("Det_directBox");
+
+	SetSensitiveDetector("l_directBox", Det_directBox);
+
+
   /*
   // declare crystal as a MultiFunctionalDetector scorer
   //

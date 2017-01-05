@@ -37,6 +37,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4Cons;
+class G4Box;
 class G4Tubs;
 //class G4Box;
 
@@ -76,11 +77,15 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
 		G4VPhysicalVolume* physWorld;
   	G4LogicalVolume* logicWorld;
 
+		G4Box* s_directBox;
+		G4VPhysicalVolume* p_directBox;
+  	G4LogicalVolume* l_directBox;
+
   	G4LogicalVolume* l_outerTube;
     G4bool  fCheckOverlaps;
 		G4double innerR;
 		G4double outerR;
-		G4double hz;
+		G4double hx, hy, hz;
 		G4double startAngle;
 		G4double spanningAngle;
   	G4double inner_r_min, inner_r_max, outer_r_min, outer_r_max, cone_length;

@@ -30,13 +30,14 @@
 //
 
 #include "SensitiveDetector.hh"
-//#include "EDAnalysis.hh"
 
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
 #include "G4ios.hh"
+#include "g4root.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,6 +62,30 @@ void SensitiveDetector::Initialize(G4HCofThisEvent* hce)
 G4bool SensitiveDetector::ProcessHits(G4Step* step,
                                 G4TouchableHistory* /*history*/)
 {
+
+	G4Track* cur_track = step->GetTrack();
+	G4StepPoint* pre_step = step->GetPreStepPoint();
+	G4StepPoint* post_step = step->GetPostStepPoint();
+	G4int cur_id = cur_track->GetParentID();
+	auto analysisManager = G4AnalysisManager::Instance();
+
+
+	G4String pre_step_vol_name =  pre_step->GetTouchable()->GetVolume()->GetName();
+	G4String post_step_vol_name =  post_step->GetTouchable()->GetVolume()->GetName();
+
+	G4String particleName = cur_track->GetDefinition()->GetParticleName();
+
+	if(particleName.compare("gamma") == 0 && pre_step_vol_name.compare(post_step_vol_name) != 0) {
+		G4cout << "##############################################" << G4endl;
+		G4cout << "Particle name is " << particleName << G4endl;
+		G4cout << "pre_step volume name is " << pre_step->GetTouchable()->GetVolume()->GetName() << G4endl;
+		G4cout << "post_step volume name is " << post_step->GetTouchable()->GetVolume()->GetName() << G4endl;
+		G4cout << "E_tot = " << cur_track->GetTotalEnergy() << G4endl;
+
+		analysisManager->FillH1(0, cur_track->GetTotalEnergy()/keV);
+
+	}
+
 	/*
   // Change the following line to get the charge of the tracked particle
   G4double charge = step->GetTrack()->GetDefinition()->GetPDGCharge();
