@@ -29,6 +29,7 @@
 /// \brief Implementation of the B3DetectorConstruction class
 
 #include "DetectorConstruction.hh"
+#include "SensitiveDetector.hh"
 
 #include "G4NistManager.hh"
 #include "G4Box.hh"
@@ -213,6 +214,7 @@ void B3DetectorConstruction::ConstructSDandField()
 {
   G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
+	SensitiveDetector* directBox = new SensitiveDetector("directBox");
   /*
   // declare crystal as a MultiFunctionalDetector scorer
   //
