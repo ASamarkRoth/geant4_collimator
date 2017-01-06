@@ -1,3 +1,9 @@
+//#include "TRint.h"
+#include "TApplication.h"
+#include "TSystem.h"
+#include "TStyle.h"
+#include "TGaxis.h"
+
 #include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
@@ -17,6 +23,41 @@ using namespace std;
 ///home/anton/Documents/PhD/geant4/project_course/build/results
 
 int main(int argc, char** argv) {
+//int analysis() {
+
+	//Modify canvas styles :)
+  TGaxis::SetMaxDigits(3);
+  gStyle->SetCanvasColor(kWhite);
+  gStyle->SetFrameLineWidth(2);
+  gStyle->SetFrameLineColor(kWhite); //"No frame"
+  gStyle->SetPadLeftMargin(0.13);
+  gStyle->SetPadTopMargin(0.11);
+  gStyle->SetPadRightMargin(0.1);
+  gStyle->SetPadBottomMargin(0.15);
+  //cout << "Margins are " << gStyle->GetPadLeftMargin() << " " << gStyle->GetPadTopMargin() << " " << gStyle->GetPadRightMargin() << " " << gStyle->GetPadBottomMargin() << " " << endl;
+  gStyle->SetTitleSize(0.05,"xy");
+  //gStyle->SetTitleOffset(12,"x"); //1.2   Doesn't do anything!
+  //gStyle->SetTitleOffset(10,"y"); //1.0   Doesn't do anything!
+  gStyle->SetOptStat();
+  gStyle->SetLegendBorderSize(0);
+  gStyle->SetLineWidth(2.); //X and Y axis thickness
+  gStyle->SetLabelSize(0.05,"xy"); //Size of numbers on X and Y axes
+  gStyle->SetLabelOffset(0.015,"xy"); //Offset of numbers on X and Y axes
+	gStyle->SetTitleOffset(1.2, "xy");
+  gStyle->SetLabelFont(42,"xy"); //Font on labels on X and Y axes
+  //gStyle->SetHistoLineWidth(5);
+  gStyle->SetCanvasBorderMode(0);     // turn off canvas borders
+  gStyle->SetPadBorderMode(0);
+  //gStyle->SetPaintTextFormat("5.2f");  // What precision to put numbers if plotted with "TEXT"
+  gStyle->SetPaintTextFormat("g");  // What precision to put numbers if plotted with "TEXT"
+  gStyle->SetNumberContours(20);
+  //gStyle->SetTextSize(2.1);
+  gStyle->SetTextFont(42);
+  gStyle->SetStripDecimals(0);
+  gStyle->SetOptStat(1111111);
+	gStyle->SetLegendTextSize(0.03);
+
+	TApplication theApp("tapp", &argc, argv);
 
 	TFile* root_file;
 	TH2D* hist1;
@@ -70,7 +111,7 @@ int main(int argc, char** argv) {
 	double marker_style[runs] = {21, 21};
 	TColor marker_colour[runs] = {TColor(1,0,0), TColor(0,1,0)};
 
-	TLegend* leg = new TLegend(0.1,0.7,0.48,0.9);
+	TLegend* leg = new TLegend(0.7,0.7,0.48,0.9);
 	//leg->SetHeader("Collimator type","C"); // option "C" allows to center the header
 	TString legend_labels[runs] = {TString("Simple, 1 mm diameter"), TString("Simple, 1.5 mm diameter")};
 
@@ -105,4 +146,9 @@ int main(int argc, char** argv) {
 	C->Update();
 
 	C->Write();
+
+	//gSystem->ProcessEvents();
+	theApp.Run();
+
+	return 0;
 }
