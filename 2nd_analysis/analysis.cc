@@ -63,6 +63,7 @@ int main(int argc, char** argv) {
 	TH2D* hist1;
 	TH2D* hist2;
 	TH1D* hist3;
+	TH1D* hist4;
 
 	//TGraph* g_scatter[5];
 	TGraph* g_scatter;
@@ -70,10 +71,10 @@ int main(int argc, char** argv) {
 //Box size = 20x20 mm², nbr_bins = 200 -> bin_width=0.1 mm and bin_area = 0.01 mm² = 1e-4 cm² = 0.0001 cm²
 	double factor = 0.0001;
 
-	const int runs = 2;
+	const int runs = 5;
 
-	string file_name[runs] = {"simple1mm.root", "simple1.5mm.root"};
-	//string file_name[runs] = {"simple1mm.root", "simple1.5mm.root", "cones.root", "cylinders.root"};
+	//string file_name[runs] = {"simple1mm.root", "simple1.5mm.root", "coneX.root", "cone.root", "cylinder.root"};
+	string file_name[runs] = {"simple1mm2.root", "simple1p5mm2.root", "cone1mm2.root", "cone.root", "cylinder.root"};
 	string temp;
 
 	double all[runs];
@@ -82,6 +83,7 @@ int main(int argc, char** argv) {
 	double full_all2[runs];
 	double std_dev[runs];
 	double efficiency[runs];
+	double efficiency2[runs];
 
 	for(int i = 0; i < runs; i++) {
 		root_file = new TFile(TString(PWD+file_name[i]));
@@ -95,28 +97,33 @@ int main(int argc, char** argv) {
 		file_name[i] = "spec_"+file_name[i];
 		root_file = new TFile(TString(PWD+file_name[i]));
 		hist3 = (TH1D*) root_file->Get("crystalBox");
+		hist4 = (TH1D*) root_file->Get("directBox");
 		all2[i] = hist3->GetEntries();
 		full_all2[i] = hist3->GetBinContent(662);
 
 		efficiency[i] = full_all2[i]/all2[i];
+		efficiency2[i] = hist4->GetBinContent(662)/hist4->GetEntries();
 
 		cout << "Standard: all = "<<all[i] << " and full_all = "<<full_all[i] << endl;
 		cout << "New: all2 = "<<all2[i] << " and full_all2 = "<<full_all2[i] << endl;
+		cout << "New direct: all3 "<<hist4->GetEntries() << " and full_all3 = "<< hist4->GetBinContent(662) << endl;
 	}
 
 	TFile* root_write = new TFile("finished.root", "RECREATE");
 	TCanvas* C = new TCanvas();
 
-	double marker_size[runs] = {1, 1.5};
-	double marker_style[runs] = {21, 21};
-	TColor marker_colour[runs] = {TColor(1,0,0), TColor(0,1,0)};
+	double marker_size[runs] = {1, 2, 1.5, 2, 1};
+	double marker_style[runs] = {21, 21, 22, 22, 20};
+	//red, green, blue, cyan, black
+	TColor marker_colour[runs] = {TColor(1,0,0), TColor(0,1,0), TColor(0,0,1), TColor(0,1,1), TColor(0,0,0)};
 
 	TLegend* leg = new TLegend(0.7,0.7,0.48,0.9);
 	//leg->SetHeader("Collimator type","C"); // option "C" allows to center the header
-	TString legend_labels[runs] = {TString("Simple, 1 mm diameter"), TString("Simple, 1.5 mm diameter")};
+	TString legend_labels[runs] = {TString("Simple, 1 mm diameter"), TString("Simple, 1.5 mm diameter"),TString("Integrated coneX"),TString("Integrated cones with length 20 mm and diameter 1 mm"), TString("Integrated cylinders with length 20 mm and increasing diameter with 0.05 mm")};
 
 	for(int i=0; i<runs; i++) {
 		g_scatter = new TGraph(1, &std_dev[i] ,&efficiency[i]);
+		cout << "1: divergence = " << std_dev[i] << " efficiency crystal = " << efficiency[i] << " efficency direct = " << efficiency2[i] << endl;
 		g_scatter->SetName(TString(to_string(i)));
 		g_scatter->SetMarkerStyle(marker_style[i]);
 		g_scatter->SetMarkerSize(marker_size[i]);
@@ -129,14 +136,13 @@ int main(int argc, char** argv) {
 			g_scatter->GetYaxis()->CenterTitle();
 			g_scatter->GetXaxis()->CenterTitle();
 			//g_scatter->GetYaxis()->SetLimits(0.8, 1.1);
-			g_scatter->SetMinimum(0.8); //This is how to set the limits on a TGraph (y-axis)
-			g_scatter->SetMaximum(1.1);
-			g_scatter->GetXaxis()->SetLimits(0.6, 2);
+			g_scatter->SetMinimum(0.9); //This is how to set the limits on a TGraph (y-axis)
+			g_scatter->SetMaximum(1.02);
+			g_scatter->GetXaxis()->SetLimits(0.5, 1.6);
 		}
 		else {
 			g_scatter->Draw("P");
 		}
-		cout << g_scatter->GetName() << endl;
 		leg->AddEntry(g_scatter->GetName(),legend_labels[i],"p");
 	}
 

@@ -1,0 +1,76 @@
+First run with the wrong diameter (oh gosh)
+1: divergence = 0.961309 efficiency crystal = 0.961286 efficency direct = 0.922783
+2: divergence = 1.37079 efficiency crystal = 0.957353 efficency direct = 0.916922
+3: divergence = 1.31382 efficiency crystal = 0.940878 efficency direct = 0.877695
+2: divergence = 1.01118 efficiency crystal = 0.955742 efficency direct = 0.909157
+
+Cone best!
+1: divergence = 1.35775 efficiency crystal = 0.96581 efficency direct = 0.939884
+
+With first coneX, just decreased radius! r = 1.5mm
+1: divergence = 1.17341 efficiency crystal = 0.9671 efficency direct = 0.937485
+
+Increased inner radius to 1.5 mm with r = 2 mm
+1: divergence = 1.45876 efficiency crystal = 0.957216 efficency direct = 0.914994
+
+
+5cones
+Separation, r = 1.5 mm
+1: divergence = 1.03968 efficiency crystal = 0.960262 efficency direct = 0.915957
+
+Separation, r = 2 mm
+1: divergence = 1.11339 efficiency crystal = 0.953198 efficency direct = 0.903086
+
+Separation, r = 4 mm
+1: divergence = 1.35962 efficiency crystal = 0.943118 efficency direct = 0.884667
+
+Flipped, r = 2 mm
+1: divergence = 1.09938 efficiency crystal = 0.949876 efficency direct = 0.897602
+
+Flipped, r = 4 mm
+1: divergence = 1.34071 efficiency crystal = 0.940832 efficency direct = 0.880758
+
+
+2cones
+Separation, r = 1.5 mm
+1: divergence = 1.0578 efficiency crystal = 0.956208 efficency direct = 0.90991
+
+Separation, r = 2 mm
+1: divergence = 1.19908 efficiency crystal = 0.937462 efficency direct = 0.872907
+
+Flipped, same settings as above
+1: divergence = 1.15721 efficiency crystal = 0.94105 efficency direct = 0.877169
+
+Flipped, r = 4 mm
+1: divergence = 1.4312 efficiency crystal = 0.927139 efficency direct = 0.851095
+
+
+Cylinders
+Cylinders separated, r = 1.5 mm and 5 cones (with larger radii)
+1: divergence = 1.12142 efficiency crystal = 0.945911 efficency direct = 0.888243
+
+Cylinders separated, r = 2 mm and 5 cones (with larger radii)
+1: divergence = 1.26715 efficiency crystal = 0.937731 efficency direct = 0.872584
+
+Cylinders separated, r = 2 mm and 2 cones (with larger radii)
+1: divergence = 1.11865 efficiency crystal = 0.937402 efficency direct = 0.874586
+
+Have:
+Simple:
+	1 mm diam
+	1.5 mm diam
+Cone:
+	5 cones, r = 1.5 mm (+0.5 mm)
+	Same but with inner radius increased
+
+Cylinder:
+	The best simple
+
+With removed end cone, +0.25mm
+1: divergence = 0.840954 efficiency crystal = 0.941394 efficency direct = 0.884047
+
+With cones all the way and +.2 mm the best was obtained:
+1: divergence = 0.777248 efficiency crystal = 0.970574 efficency direct = 0.943988
+
+Why is it that the divergence decreases with the end cone? compared to it removed?
+

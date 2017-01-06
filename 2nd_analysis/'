@@ -1,0 +1,13 @@
+First run with the wrong diameter (oh gosh)
+1: divergence = 0.961309 efficiency crystal = 0.961286 efficency direct = 0.922783
+2: divergence = 1.37079 efficiency crystal = 0.957353 efficency direct = 0.916922
+3: divergence = 1.31382 efficiency crystal = 0.940878 efficency direct = 0.877695
+4: divergence = 1.01118 efficiency crystal = 0.955742 efficency direct = 0.909157
+
+With first coneX, just decreased radius!
+1: divergence = 0.961309 efficiency crystal = 0.961286 efficency direct = 0.922783
+1: divergence = 1.37079 efficiency crystal = 0.957353 efficency direct = 0.916922
+1: divergence = 1.17341 efficiency crystal = 0.9671 efficency direct = 0.937485
+1: divergence = 1.35775 efficiency crystal = 0.96581 efficency direct = 0.939884
+1: divergence = 1.01118 efficiency crystal = -nan efficency direct = -nan
+

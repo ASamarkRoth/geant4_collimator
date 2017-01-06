@@ -13,29 +13,20 @@
 
 # define scoring mesh
 #
-/score/create/boxMesh boxMesh_1
+
+/score/create/boxMesh directBox_mesh
 /score/mesh/boxSize 2. 2. 0.1 cm
-#/score/mesh/nBin 100 100 5
 /score/mesh/nBin 200 200 1 
 /score/mesh/translate/xyz 0 0 100.5 mm
 
 
 # define scorers and filters
 
-/score/quantity/population population
+/score/quantity/flatSurfaceCurrent current 1 true false
 /score/filter/particle gammaFilter gamma
 
-/score/quantity/flatSurfaceFlux flux 1
-/score/filter/particle gammaFilter gamma
-
-
-/score/quantity/population fullE_population
+/score/quantity/flatSurfaceCurrent current_full 1 true false
 /score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
-
-/score/quantity/flatSurfaceFlux fullE_flux 1
-/score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
-
-/score/quantity/
 
 #/score/drawProjection boxMesh_1 population
 
@@ -46,6 +37,6 @@
 /control/macroPath /home/anton/Documents/PhD/geant4/project_course/macros
 
 #Executing my own visual settings
-#/control/foreach loop.mac counter 1 2 4 6 10
-/control/foreach loop2.mac counter 0 0.05 0.1 0.5 1
+/control/foreach loop.mac counter 1 2 4 6 10
+#/control/foreach loop2.mac counter 0 0.05 0.1 0.5 1
 
