@@ -15,6 +15,8 @@
 #include <vector>
 #include "TColor.h"
 #include "TLegend.h"
+#include "TPaveText.h"
+#include "TLatex.h" //Latex in labels etc.
 
 using namespace std;
 
@@ -26,7 +28,7 @@ int main(int argc, char** argv) {
 //int analysis() {
 
 	//Modify canvas styles :)
-  TGaxis::SetMaxDigits(3);
+  TGaxis::SetMaxDigits(2);
   gStyle->SetCanvasColor(kWhite);
   gStyle->SetFrameLineWidth(2);
   gStyle->SetFrameLineColor(kWhite); //"No frame"
@@ -55,7 +57,7 @@ int main(int argc, char** argv) {
   gStyle->SetTextFont(42);
   gStyle->SetStripDecimals(0);
   gStyle->SetOptStat(1111111);
-	gStyle->SetLegendTextSize(0.03);
+	gStyle->SetLegendTextSize(0.04);
 
 	TApplication theApp("tapp", &argc, argv);
 
@@ -74,7 +76,7 @@ int main(int argc, char** argv) {
 	const int runs = 5;
 
 	//string file_name[runs] = {"simple1mm.root", "simple1.5mm.root", "coneX.root", "cone.root", "cylinder.root"};
-	string file_name[runs] = {"simple1mm2.root", "simple1p5mm2.root", "cone1mm2.root", "cone.root", "cylinder.root"};
+	string file_name[runs] = {"simple1mm2.root", "simple1p5mm2.root", "cone1mm2.root", "cone1p5mm2.root", "cylinder1mm2.root"};
 	string temp;
 
 	double all[runs];
@@ -93,7 +95,7 @@ int main(int argc, char** argv) {
 		root_file = new TFile(TString(PWD+temp));
 		hist2 = (TH2D*) root_file->Get("crystal_mesh");
 		full_all[i] = hist2->GetEntries();
-		std_dev[i] = 0.1*((hist2->GetStdDev()+hist2->GetStdDev(2))/2); //mm
+		std_dev[i] = 3*0.1*((hist2->GetStdDev()+hist2->GetStdDev(2))/2); //mm, 3*sigma
 		file_name[i] = "spec_"+file_name[i];
 		root_file = new TFile(TString(PWD+file_name[i]));
 		hist3 = (TH1D*) root_file->Get("crystalBox");
@@ -109,17 +111,22 @@ int main(int argc, char** argv) {
 		cout << "New direct: all3 "<<hist4->GetEntries() << " and full_all3 = "<< hist4->GetBinContent(662) << endl;
 	}
 
+	double solid_angle = (5.*5)/(4*100.*100);
+	cout <<solid_angle << endl;
+	cout << "Required activity for 1 kHz for 1st = " << (2000000./solid_angle)/full_all2[0]*1000 << endl;
+
 	TFile* root_write = new TFile("finished.root", "RECREATE");
 	TCanvas* C = new TCanvas();
 
-	double marker_size[runs] = {1, 2, 1.5, 2, 1};
+	double marker_size[runs] = {1, 2, 1, 2, 2};
 	double marker_style[runs] = {21, 21, 22, 22, 20};
 	//red, green, blue, cyan, black
 	TColor marker_colour[runs] = {TColor(1,0,0), TColor(0,1,0), TColor(0,0,1), TColor(0,1,1), TColor(0,0,0)};
 
-	TLegend* leg = new TLegend(0.7,0.7,0.48,0.9);
-	//leg->SetHeader("Collimator type","C"); // option "C" allows to center the header
-	TString legend_labels[runs] = {TString("Simple, 1 mm diameter"), TString("Simple, 1.5 mm diameter"),TString("Integrated coneX"),TString("Integrated cones with length 20 mm and diameter 1 mm"), TString("Integrated cylinders with length 20 mm and increasing diameter with 0.05 mm")};
+	TLegend* leg = new TLegend(0.7,0.7,0.55,0.9);
+	//leg->SetHeader("Collimator","C"); // option "C" allows to center the header, WHY DON'T WORK?
+	//leg->SetHeader("The Legend Title",""); // option "C" allows to center the header
+	TString legend_labels[runs] = {TString("Simple, 1 mm diameter"), TString("Simple, 1.5 mm diameter"),TString("Integrated cones (i)"),TString("Integrated cones (ii)"), TString("Integrated cylinders")};
 
 	for(int i=0; i<runs; i++) {
 		g_scatter = new TGraph(1, &std_dev[i] ,&efficiency[i]);
@@ -131,14 +138,15 @@ int main(int argc, char** argv) {
 		if(i == 0) {
 			g_scatter->Draw("AP"); //For the first one, one needs to draw axis with "A". Option "SAME" is not needed with TGraph!
 			//Axis objects for TGraph are created after it has been drawn, thus they need to be defined here.
+			g_scatter->SetTitle("");
 			g_scatter->GetYaxis()->SetTitle("Scattering efficiency");
-			g_scatter->GetXaxis()->SetTitle("Divergence, StdDev (mm)");
+			g_scatter->GetXaxis()->SetTitle("Divergence, 3#sigma (mm)");
 			g_scatter->GetYaxis()->CenterTitle();
 			g_scatter->GetXaxis()->CenterTitle();
 			//g_scatter->GetYaxis()->SetLimits(0.8, 1.1);
-			g_scatter->SetMinimum(0.9); //This is how to set the limits on a TGraph (y-axis)
-			g_scatter->SetMaximum(1.02);
-			g_scatter->GetXaxis()->SetLimits(0.5, 1.6);
+			g_scatter->SetMinimum(0.92); //This is how to set the limits on a TGraph (y-axis)
+			g_scatter->SetMaximum(1);
+			g_scatter->GetXaxis()->SetLimits(2, 2.8);
 		}
 		else {
 			g_scatter->Draw("P");
@@ -152,6 +160,7 @@ int main(int argc, char** argv) {
 	C->Update();
 
 	C->Write();
+	C->SaveAs("efficiency.eps");
 
 	//gSystem->ProcessEvents();
 	theApp.Run();

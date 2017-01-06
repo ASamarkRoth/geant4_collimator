@@ -127,8 +127,8 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 
   // Create collimator
-  innerR = 1*mm*0.5;
-  //innerR = 0*mm; //for cylinders
+  innerR = 1.5*mm*0.5;
+  innerR = 0*mm; //for cylinders
 	outerR = 10.*cm;
   hz = 10.*cm;
   startAngle = 0.*deg;
@@ -142,7 +142,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   G4double z_translation = hz*0.5;
   G4RotationMatrix rotation = G4RotationMatrix();
-	//rotation.rotateY(180*deg); //for flipped cone and cylinders
+	rotation.rotateY(180*deg); //for flipped cone and cylinders
 
   G4Transform3D transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
 
@@ -159,7 +159,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   inner_r_min = inner_r_max = outer_r_min = innerR;
   //inner_r_min = outer_r_min = 0;
-  if(outer_r_max < 0) outer_r_max = (0.5+0.2)*mm;
+  if(outer_r_max < 0) outer_r_max = (innerR+0.2)*mm;
   //outer_r_max = 1.0000001*mm;
 
   s_cone = new G4Cons("s_cone", inner_r_min, inner_r_max, outer_r_min, outer_r_max, 0.5*cone_length, startAngle, spanningAngle);
@@ -171,7 +171,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   for(int j=0;j<nbr_cones;j++) {
     name = "p_cone"+std::to_string(j);
-    new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
+    //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
     //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(2*j+1)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps); // for special separation style
     G4cout << "Placement = " << G4ThreeVector(0, 0, (2*j+1)*cone_length)/cm << G4endl;
   }
@@ -193,7 +193,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
     name = "cyl_"+std::to_string(j);
 		s_cyls = new G4Tubs(G4String("s_"+name), innerR, outerR, 0.5*cyl_length, startAngle, spanningAngle);
     l_cyls = new G4LogicalVolume(s_cyls, air_mat, G4String("l_"+name));
-    //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cyl_length), l_cyls, G4String("p_"+name), l_outerTube, 0, 0, fCheckOverlaps);
+    new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cyl_length), l_cyls, G4String("p_"+name), l_outerTube, 0, 0, fCheckOverlaps);
     G4cout << "Placement = " << G4ThreeVector(0, 0, (j+0.5)*cyl_length)/cm << G4endl;
   }
 

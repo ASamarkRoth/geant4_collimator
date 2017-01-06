@@ -72,5 +72,10 @@ With removed end cone, +0.25mm
 With cones all the way and +.2 mm the best was obtained:
 1: divergence = 0.777248 efficiency crystal = 0.970574 efficency direct = 0.943988
 
+Tried: 
+	Removed end cone and varied radius addition from 0.05 to 3 mm
+	Same with end cone
+	Varied with 2, 3, 5, and 10? cones
+
 Why is it that the divergence decreases with the end cone? compared to it removed?
 

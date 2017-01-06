@@ -49,8 +49,8 @@
 /run/beamOn 2000000
 /score/drawProjection crystal_mesh current
 
-/score/dumpQuantityToFile crystal_mesh current ../2nd_analysis/results/cone1mm2.txt ROOT
-/score/dumpQuantityToFile crystal_mesh current_full ../2nd_analysis/results/full_cone1mm2.txt ROOT
+/score/dumpQuantityToFile crystal_mesh current ../2nd_analysis/results/cylinder1mm2.txt ROOT
+/score/dumpQuantityToFile crystal_mesh current_full ../2nd_analysis/results/full_cylinder1mm2.txt ROOT
 
 #/score/dumpQuantityToFile directBox_mesh current results/simple1.5mm.txt ROOT
 #/score/dumpQuantityToFile directBox_mesh current_full results/full_simple1.5mm.txt ROOT
