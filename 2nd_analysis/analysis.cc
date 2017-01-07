@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
 	C->Update();
 
 	C->Write();
-	C->SaveAs("efficiency.eps");
+	C->SaveAs("efficiency.pdf");
 
 	//gSystem->ProcessEvents();
 	theApp.Run();

@@ -1,6 +1,10 @@
 \documentclass[a4paper]{article}
 
 \usepackage[]{amsmath}
+\usepackage[]{graphicx} %for includegraphics
+\usepackage{epstopdf} %eps to pdf conversion with same compiler (goes after graphicx!)
+\usepackage{float}
+
 \begin{document}
 
 \section{Collimator simulations for development of a scanning system}
@@ -30,12 +34,110 @@ The idea of integrating cones on top of the cylinder was told to be a preferable
 In this small project the performance of different collimators have been studied to determine the suitable collimator in use within the \textit{Compex} project.
 
 \section{Geometry definition}
+The base geometry:
+\begin{description}
+  \item[World] $1 \times 1 \times 1$ m$^3$, air
+  \item[Cylinder] Outer radius 10 cm, length 10 cm, lead. If needed an inner diameter of 1 or 1.5 mm. Placed towards the $+\hat{z}$ starting in $z = 0$.
+  \item[Integrated cones] $N$ integrated cones were placed within the mother volume cylinder, with a set inner diameter to match that of the mother and an outer diameter which varied for optimised performance.
+The cones were placed in such a way that the complete cylinder in $+\hat{z}$ was filled and the direction of the cones was varied with a 180$^\circ$ rotation.
+The tip of the cones in the same direction of the beam was by far the best and if not otherwise mentioned (denoted flipped), it was employed.
+  \item[Integrated cylinders] $N$ integrated cylinders were placed within the mother volume cylinder now with an inner diameter set to zero. Cylinders, first one with a diameter of 1 mm and then $N-1$ with a varied increasing diameter for best performance, were placed such that the cylinder with the smallest diameter was at the exit of the collimator.
+\end{description}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{geometry.png}
+  \caption{Geometry}
+  \label{fig:geometry}
+\end{figure}
+
 
 \section{Method}
+\subsection{Primary generator and run}
+The primary generator in Geant4 was set as follows:
+\begin{description}
+  \item[Particle] Gamma-photons
+  \item[Primary vertex] $(0,0,0)$
+  \item[Energy] $661.7$ keV to resemble a $^{137}$Cs source
+  \item[Direction] $(u_x, u_y, 1)$ where:
+  \begin{align}
+    &u_x = r \cdot \cos \theta \\
+    &u_x = r \cdot \sin \theta \\
+    &\theta = \text{uniform random number}: [0, 2\pi] \\
+    &r = 0.1 \cdot \sqrt{\text{uniform random number}: [0, 1]}
+    \label{eq:GDir}
+  \end{align}
+\end{description}
+A run was comprised of $2\cdot 10^6$ events. For the first run it was 100000.
+
+\subsection{Detectors}
+For the final analysis a box scoring mesh with the following settings was created:
+\begin{description}
+  \item[Size] $5\times5\times0.01$ cm$^3$
+  \item[Location] $(0, 0, 150.0)$ mm
+  \item[Binning] $500\times500$
+\end{description}
+I.e. it was set 5 cm from the collimator exit to resemble a real \textit{Compex} crystal scanning.
+
+For the detailed examination with the too large inner diameter the following box scoring mesh was used:
+\begin{description}
+  \item[Size] $2\times2\times0.1$ cm$^3$
+  \item[Location] $(0, 0, 100.5)$ mm
+  \item[Binning] $200\times200$
+\end{description}
+I.e. it was set directly on top of the collimator exit.
+
+A sensitive detector was set up to create an energy spectrum. It was placed 5 cm away from the collimator exit and only stored the full energy of the incoming photons.
+
+\subsection{Analysis}
+The flux (first time cm$^{-2}$) in number of $\gamma$-rays was scored with one of the built-in Geant4 scorers. Besides this, the sensitive detector scored the energy of the incoming photons and stored the energies in a histogram.
+The scattering efficiency was determined as the ratio of the number of full energy $\gamma$-rays and the total detected in the sensitive detector. The beam divergence was determined as $3\sigma$ of the 2D flux. Finally, the required activity was calculated on the basis of the number of full energy $\gamma$-rays detected and the solid angle coverage:
+\begin{equation}
+  \Omega = \frac{5^2}{100^2}
+  \label{eq:solid_angle}
+\end{equation}
 
 \section{Results}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{efficiency.eps}
+  \caption{Results}
+  \label{fig:EffvsDiv}
+\end{figure}
+\begin{description}
+  \item[Simple, 1 mm diameter] A cylindrical collimator with diameter 1 mm.
+  \item[Simple, 1.5 mm diameter] A cylindrical collimator with diameter 1.5 mm.
+  \item[Integrated cones (i)] 5 cones (20 mm length) with an inner diameter of 1 mm and an outer of 1.4 mm.
+  \item[Integrated cones (ii)] 5 cones (20 mm length) with an inner diameter of 1.5 mm and an outer of 1.9 mm.
+  \item[Integrated cylinders] 5 cylinders (20 mm length) where the last one had a diameter of 1 mm and the rest an increasing diameter of 0.05 mm.
+\end{description}
+
+The required activity to achieve a count rate of 1 kHz for the first configuration is about 500 MBq.
+
 
 \section{Conclusion}
+It seems true that a collimator with integrated cones actually is able to increase the scattering efficiency, but it largely depends on the dimensions of the cones. However, many factors speak against such a configuration:
+\begin{itemize}
+  \item The scattering efficiency is only increased marginally.
+  \item The scattering efficiency is already close to maximum with the conventional collimator type.
+  \item The beam divergence increases.
+  \item It is unclear of whether it is possible to manufacture such a structure.
+\end{itemize}
+The manufacturing possible integrated cylinder configuration did not improve on the scattering efficiency, either.
+The beam divergence is rather not a measure of the spread of the beam but more a measure of leakage $\gamma$-rays making it through the lead block.
+
+Several further configurations were investigated to see if they possibly could better optimise a collimator. These were:
+\begin{itemize}
+  \item Integrated cones with the end coned removed.
+  \item Integrated cones separated a set distance.
+  \item Integrated cones flipped.
+  \item Integrated cylinders separated a set distance.
+  \item
+\end{itemize}
+Several different dimensions were examined for the different configurations (see notes.txt in 2nd\_analysis).
+
+
+
 
 
 
