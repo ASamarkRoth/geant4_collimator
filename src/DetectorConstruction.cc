@@ -99,6 +99,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   G4Material* air_mat = data_mat->FindOrBuildMaterial("G4_AIR");
   G4Material* lead_mat = data_mat->FindOrBuildMaterial("G4_Pb");
   G4Material* copper_mat = data_mat->FindOrBuildMaterial("G4_Cu");
+  G4Material* wolfram_mat = data_mat->FindOrBuildMaterial("G4_W");
 
   //
   // World
@@ -138,8 +139,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   G4Tubs* s_outerTube = new G4Tubs("outerTube", innerR, outerR, 0.5*hz, startAngle, spanningAngle);
   G4Tubs* s_outerTube2 = new G4Tubs("outerTube2", 0, outerR, 0.5*hz, startAngle, spanningAngle);
 
-  l_outerTube = new G4LogicalVolume(s_outerTube, lead_mat, "l_outerTube");
-  G4LogicalVolume* l_outerTube2 = new G4LogicalVolume(s_outerTube2, lead_mat, "l_outerTube2");
+  l_outerTube = new G4LogicalVolume(s_outerTube, wolfram_mat, "l_outerTube");
 
   G4double z_translation = hz*0.5;
   G4RotationMatrix rotation = G4RotationMatrix();
