@@ -128,10 +128,10 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 
   // Create collimator
-  innerR = 1.5*mm*0.5;
+  innerR = 1*mm*0.5;
   //innerR = 0*mm; //for cylinders
   innerR = 4*mm*0.5;
-	outerR = 10.*cm;
+	outerR = 6.*cm;
   hz = 10.*cm;
   startAngle = 0.*deg;
   spanningAngle = 360.*deg;
@@ -147,7 +147,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   G4Transform3D transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
 
-  G4VPhysicalVolume* p_outerTube = new G4PVPlacement(transform, l_outerTube, "p_outerTube", logicWorld, 0, 0, fCheckOverlaps);
+  //G4VPhysicalVolume* p_outerTube = new G4PVPlacement(transform, l_outerTube, "p_outerTube", logicWorld, 0, 0, fCheckOverlaps);
 
   //The conical stuff
 
@@ -172,7 +172,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   for(int j=0;j<nbr_cones;j++) {
     name = "p_cone"+std::to_string(j);
-    new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
+    //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
     //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(2*j+1)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps); // for special separation style
     G4cout << "Placement = " << G4ThreeVector(0, 0, (2*j+1)*cone_length)/cm << G4endl;
   }
@@ -239,6 +239,19 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
   p_crystalBox = new G4PVPlacement(transform, l_crystalBox, "p_crystalBox", logicWorld, 0, 0, fCheckOverlaps);
 
+	//side_"detector"
+	hy = hz = 20*mm;
+	hx= 1*mm;
+
+	s_sideBox = new G4Box("s_sideBox", 0.5*hx, 0.5*hy, 0.5*hz);
+	l_sideBox = new G4LogicalVolume(s_crystalBox, air_mat, "l_sideBox");
+
+  G4double y_translation = 60*mm+0.5*hx;
+  z_translation = 0.1*mm;
+  rotation = G4RotationMatrix();
+	rotation.rotateZ(90*deg);
+  transform = G4Transform3D(rotation, G4ThreeVector(0,y_translation,z_translation));
+  p_sideBox = new G4PVPlacement(transform, l_sideBox, "p_sideBox", logicWorld, 0, 0, fCheckOverlaps);
   //always return the physical World
   //
   return physWorld;

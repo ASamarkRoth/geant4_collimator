@@ -85,6 +85,10 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
 		G4VPhysicalVolume* p_crystalBox;
   	G4LogicalVolume* l_crystalBox;
 
+		G4Box* s_sideBox;
+		G4VPhysicalVolume* p_sideBox;
+  	G4LogicalVolume* l_sideBox;
+
   	G4LogicalVolume* l_outerTube;
     G4bool  fCheckOverlaps;
 		G4double innerR;

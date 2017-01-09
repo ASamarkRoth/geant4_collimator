@@ -104,15 +104,14 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.1*mm));
   fParticleGun->SetParticleEnergy(661.7*keV);
 
-  G4double cover = 0.1;
+  G4double cover = 1;
 	G4double random = G4UniformRand();
   G4double r = cover*std::sqrt(random);
-	r = 0;
 
-  G4double phi = G4UniformRand()*2*pi;
+  G4double phi = G4UniformRand()*pi;
 
   G4double ux = r*std::cos(phi);
   G4double uy = r*std::sin(phi);
@@ -125,7 +124,7 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   */
 
 
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,1.));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,1,uy));
 
   //create vertex
   //
