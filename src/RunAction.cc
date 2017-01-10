@@ -60,7 +60,11 @@ void B3aRunAction::BeginOfRunAction(const G4Run* run)
 
 	auto analysisManager = G4AnalysisManager::Instance();
 
+
+	analysisManager->OpenFile("side_spec2.root");
+#ifdef G4ANALYSIS_USE_ROOT
 	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/side_spec2.root");
+#endif
 
 	//directBox
 	analysisManager->CreateH1("directBox", "Energy at end of collimator", 1000, 0, 1000);
