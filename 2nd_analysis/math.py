@@ -23,4 +23,4 @@ print("Solid angle det: ", solid_angle_det)
 print("Partial area: ", partial_area)
 print("Expected counts are: ", expect_count, " and the obtained: ", counts)
 
-counts = 18732 #1e9 events
+counts = 18732 #1e9 events obs wrong inner diam

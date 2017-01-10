@@ -18,7 +18,7 @@
 /score/filter/particle gammaFilter gamma
 
 #/run/beamOn 110000000
-/run/beamOn 1000000000
+/run/beamOn 1000000
 #/score/drawProjection crystal_mesh flux
 
 #/score/dumpQuantityToFile crystal_mesh current ../2nd_analysis/results/side_counts.txt ROOT

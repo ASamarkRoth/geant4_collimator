@@ -41,9 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3aRunAction::B3aRunAction()
- : G4UserRunAction(),
-   fGoodEvents("GoodEvents", 0),
-   fSumDose("SumDose", 0.)
+ : G4UserRunAction()
 {
   //add new units for dose
   //
@@ -57,10 +55,6 @@ B3aRunAction::B3aRunAction()
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
   new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);
 
-  // Register parameter to the parameter manager
-  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
-  parameterManager->RegisterParameter(fGoodEvents);
-  parameterManager->RegisterParameter(fSumDose);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,16 +68,12 @@ void B3aRunAction::BeginOfRunAction(const G4Run* run)
 {
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
-  // reset parameters to their initial values
-  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
-  parameterManager->Reset();
-
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
 	auto analysisManager = G4AnalysisManager::Instance();
 
-	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/side_spec.root");
+	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/side_spec2.root");
 
 	//directBox
 	analysisManager->CreateH1("directBox", "Energy at end of collimator", 1000, 0, 1000);

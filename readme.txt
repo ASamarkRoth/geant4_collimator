@@ -22,8 +22,13 @@ Use radioactive source?
 Use GPS, general particle source #deemed too difficult concerning a directed beam!
 
 
-#Build project:
+#Build project @ebbe:
 cmake -DGeant4_DIR=/home/anton/Ebbe_programs/geant4/geant4.10.02.p02-install/lib/Geant4-10.2.2 -DCMAKE_MODULE_PATH=/home/anton/Ebbe_programs/geant4/geant4.10.02.p02-install/lib/Geant4-10.2.2/Modules /home/anton/Documents/PhD/geant4/project_course
+
+@iridium:
+cmake /nfs/users/aroth/geant4_collimator
+
+
 
 For kappa and/or conference proceeding about our scanning system:
 Study 4 different collimators more thoroughly and conclude a choice for our scanning table. 
