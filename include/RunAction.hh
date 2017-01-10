@@ -32,7 +32,6 @@
 #define B3aRunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "G4Parameter.hh"
 #include "globals.hh"
 
 /// Run action class

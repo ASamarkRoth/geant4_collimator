@@ -54,9 +54,11 @@ RE03UserScoreWriter::RE03UserScoreWriter()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03UserScoreWriter::~RE03UserScoreWriter()
 {
+#ifdef G4ANALYSIS_USE_ROOT
 	//delete root_file_name;
 	delete root_file;
 	delete hist2D;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,7 +114,7 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 					 << psName << "\"." << G4endl;
 		return;
 	}
-	std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
+	std::map<G4int, G4double*>* score = msMapItr->second->GetMap();
 	ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
 
 	// write header info
