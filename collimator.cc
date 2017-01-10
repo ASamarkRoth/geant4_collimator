@@ -37,6 +37,7 @@
 #include "G4UImanager.hh"
 
 #include "Randomize.hh"
+#include "G4Timer.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -53,12 +54,14 @@
 
 int main(int argc,char** argv)
 {
+	G4Timer timer;
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = 0;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
+	else timer.Start();
 
   // Choose the Random engine
   //
@@ -122,6 +125,21 @@ int main(int argc,char** argv)
 
   delete visManager;
   delete runManager;
+	if(! ui) {
+		timer.Stop();
+		G4cout << G4endl;
+		G4cout << "******************************************";
+		G4cout << G4endl;
+		G4cout << "Total Real Elapsed Time is: "<< timer.GetRealElapsed();
+		G4cout << G4endl;
+		G4cout << "Total System Elapsed Time: " << timer.GetSystemElapsed();
+		G4cout << G4endl;
+		G4cout << "Total GetUserElapsed Time: " << timer.GetUserElapsed();
+		G4cout << G4endl;
+		G4cout << "******************************************";
+		G4cout << G4endl;
+	}
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

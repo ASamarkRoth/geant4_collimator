@@ -62,8 +62,10 @@ public:
                                   const G4String & option);
 
 	std::string root_file_name;
+#ifdef G4ANALYSIS_USE_ROOT
 	TFile* root_file;
 	TH2* hist2D;
+#endif
 };
 
 #endif

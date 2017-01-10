@@ -86,6 +86,7 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 	if(opt.compare("root") == 0) G4cout << "Writing scorer to ROOT-file" << G4endl;
 
 	// open the file
+#ifdef G4ANALYSIS_USE_ROOT
 	if(opt.compare("root")==0) {
 		root_file_name = fileName;
 		std::size_t last_dot = root_file_name.find_last_of(".");
@@ -93,6 +94,7 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 		root_file_name = root_file_name.substr(0,last_dot)+".root";
 		root_file = new TFile(TString(root_file_name), "RECREATE");
 	}
+#endif
 	std::ofstream ofile(fileName);
 	if(!ofile) {
 		G4cerr << "ERROR : DumpToFile : File open error -> "
@@ -117,12 +119,14 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 	ofile << "# xy projection" << G4endl;
 	ofile << fNMeshSegments[0] << " " << fNMeshSegments[1] << " " << G4endl;
 
+#ifdef G4ANALYSIS_USE_ROOT
 	//Creating 2D-ROOT hist
 	if(opt.compare("root")==0) {
 		hist2D = new TH2D(fScoringMesh->GetWorldName(), msMapItr->first, fNMeshSegments[0], 0, fNMeshSegments[0], fNMeshSegments[1], 0, fNMeshSegments[1]);
 		hist2D->SetXTitle("x (bin)");
 		hist2D->SetYTitle("y (bin)");
 	}
+#endif
 
 	// declare xy array
 	std::vector<double> projy;
@@ -155,7 +159,9 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 
 			nbr_entries += projxy[x][y];
 
+#ifdef G4ANALYSIS_USE_ROOT
 			if(opt.compare("root")==0) hist2D->Fill(x, y, projxy[x][y]);
+#endif
 
 		} // y
 	} // x
@@ -164,11 +170,13 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 	// close the file
 	ofile.close();
 
+#ifdef G4ANALYSIS_USE_ROOT
 	if(opt.compare("root")==0) {
 		//hist2D->Write();
 		hist2D->SetEntries(nbr_entries);
 		root_file->Write();
 	}
+#endif
 
 
 }

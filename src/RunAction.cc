@@ -83,7 +83,7 @@ void B3aRunAction::BeginOfRunAction(const G4Run* run)
 
 	auto analysisManager = G4AnalysisManager::Instance();
 
-	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/side_spec.root");
+	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/side_spec2.root");
 
 	//directBox
 	analysisManager->CreateH1("directBox", "Energy at end of collimator", 1000, 0, 1000);

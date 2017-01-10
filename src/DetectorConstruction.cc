@@ -130,7 +130,6 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   // Create collimator
   innerR = 1*mm*0.5;
   //innerR = 0*mm; //for cylinders
-  innerR = 4*mm*0.5;
 	outerR = 6.*cm;
   hz = 10.*cm;
   startAngle = 0.*deg;
