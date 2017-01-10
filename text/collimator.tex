@@ -5,6 +5,8 @@
 \usepackage{epstopdf} %eps to pdf conversion with same compiler (goes after graphicx!)
 \usepackage{float}
 
+\title{Collimator simulations for development of a scanning system}
+
 \begin{document}
 
 \section{Collimator simulations for development of a scanning system}
@@ -138,6 +140,53 @@ Several different dimensions were examined for the different configurations (see
 
 
 
+
+
+
+
+\section{Shielding}
+Since a very strong source is to be used,  $\sim 1$ GBq, sufficient shielding is essential to avert any radiation damages. To evaluate the amount of shielding necessary Geant4 simulations were performed.
+\subsection{Geometry}
+The geometry employed was very similar to the one above. The material of the cylinder was changed to wolfram and an inner diameter of 1 mm was used. An additional sensitive volume was placed with the following properties:
+\begin{description}
+  \item[Side box] $1\times1\times0.00001$ cm$^3$, air. Placed just on top of the cylinder collimator in $+\hat{y}$ and moved a little in $\hat{z}$ such that it was completely covered by the cylinder from the source.
+\end{description}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{geometry2.png}
+  \caption{Geometry}
+  \label{fig:geometry2}
+\end{figure}
+\subsection{Method}
+\subsubsection{Primary generator and run}
+The primary generator in Geant4 was set as follows:
+\begin{description}
+  \item[Particle] Gamma-photons
+  \item[Primary vertex] $(0,0,0)$
+  \item[Energy] $661.7$ keV to resemble a $^{137}$Cs source
+  \item[Direction] $(u_x, 1, u_z)$ where:
+  \begin{align}
+    &u_x = r \cdot \cos \theta \\
+    &u_z = r \cdot \sin \theta \\
+    &\theta = \text{uniform random number}: [0, \pi] \\
+    &r = 0.25 \cdot \sqrt{\text{uniform random number}: [0, 1]}
+    \label{eq:GDir2}
+  \end{align}
+\end{description}
+
+\subsubsection{Analysis}
+The box was set as a sensitive detector and the energy of the $\gamma$-rays entering the volume was stored in a histogram (just like above). In the analysis only the total histogram entries were used for the final calculations.
+
+\subsection{Results}
+The number of counts obtained with a cylinder diameter of 6 cm was 1400.
+Translated into the count rate per cm$^2$ for a 1 GBq source (see 2nd\_analysis/math.py) it corresponds to:
+\begin{description}
+  \item[Count rate] 120 Bq/cm$^2$
+  \item[Count rate around collimator] 20 kBq (based on the above number, which is exaggerated since that varies over the cylinder surface)
+\end{description}
+
+\subsection{Conclusion}
+A diameter of 6 cm seems to reduce the radiation exposure around the collimator to viable levels. For additional safety measures it will be covered with another 4 cm heavy met around the cylinder and on top and this will imply almost 100 \% shielding.
 
 
 

@@ -130,7 +130,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   // Create collimator
   innerR = 1*mm*0.5;
   //innerR = 0*mm; //for cylinders
-	outerR = 10.*cm;
+	outerR = 6.*cm;
   hz = 10.*cm;
   startAngle = 0.*deg;
   spanningAngle = 360.*deg;
@@ -140,7 +140,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   l_outerTube = new G4LogicalVolume(s_outerTube, wolfram_mat, "l_outerTube");
 
-  G4double z_translation = hz*0.5;
+  G4double z_translation = hz/2;
   G4RotationMatrix rotation = G4RotationMatrix();
 	rotation.rotateY(180*deg); //for flipped cone and cylinders
 

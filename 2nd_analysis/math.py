@@ -44,3 +44,5 @@ counts_per_sec = counts_coll/(count_real/source_activity)
 
 print("Count rate in box: ", counts_per_sec, " Bq")
 
+counts_for_collimator_sides = counts_per_sec*2*math.pi*3*10
+print("Count rate for complete collimator = ", counts_for_collimator_sides, " Bq!")
