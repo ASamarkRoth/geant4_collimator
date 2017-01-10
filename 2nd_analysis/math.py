@@ -24,3 +24,23 @@ print("Partial area: ", partial_area)
 print("Expected counts are: ", expect_count, " and the obtained: ", counts)
 
 counts = 18732 #1e9 events obs wrong inner diam
+counts = 145 #1e7 events, outer diam = 6 cm
+counts_coll = 1400 #1e8 events, outer diam = 6 cm
+counts = 0 #1e8 events, outer diam = 10 cm
+
+count_real = 1e8/(solid_angle_beam)
+
+print("Real counts = ", count_real/1.e9, "GBq")
+
+#Calculating real count rate
+r_cyl = 6 #cm
+l_box = 1 #cm
+angle_coverage_det = 2*math.atan(0.5*l_box/r_cyl)
+
+print("Angle coverage detector = ", 180*(angle_coverage_det/math.pi))
+
+source_activity = 1e9
+counts_per_sec = counts_coll/(count_real/source_activity)
+
+print("Count rate in box: ", counts_per_sec, " Bq")
+
