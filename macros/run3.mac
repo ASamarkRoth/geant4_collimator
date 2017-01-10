@@ -18,13 +18,13 @@
 /score/filter/particle gammaFilter gamma
 
 #/run/beamOn 110000000
-/run/beamOn 1000
-/score/drawProjection crystal_mesh flux
+/run/beamOn 1000000000
+#/score/drawProjection crystal_mesh flux
 
-/score/dumpQuantityToFile crystal_mesh current ../2nd_analysis/results/side_counts.txt ROOT
+#/score/dumpQuantityToFile crystal_mesh current ../2nd_analysis/results/side_counts.txt ROOT
 
 #Setting macro path to created folder
-/control/macroPath /home/anton/Documents/PhD/geant4/project_course/macros
+#/control/macroPath /home/anton/Documents/PhD/geant4/project_course/macros
 
 #Executing my own visual settings
 #/control/foreach loop.mac counter 1 2 4 6 10

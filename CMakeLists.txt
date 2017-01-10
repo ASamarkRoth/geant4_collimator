@@ -66,6 +66,7 @@ set(EXAMPLEB3_SCRIPTS
   init_vis.mac
   macros/run1.mac
   macros/run2.mac
+  macros/run3.mac
   macros/visuals.mac
   vis.mac
   )

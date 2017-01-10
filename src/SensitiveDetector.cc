@@ -89,6 +89,9 @@ G4bool SensitiveDetector::ProcessHits(G4Step* step,
 		if(this->GetName().compare("Det_crystalBox") == 0) {
 			analysisManager->FillH1(1, cur_track->GetTotalEnergy()/keV);
 		}
+		if(this->GetName().compare("Det_sideBox") == 0) {
+			analysisManager->FillH1(2, cur_track->GetTotalEnergy()/keV);
+		}
 
 	}
 

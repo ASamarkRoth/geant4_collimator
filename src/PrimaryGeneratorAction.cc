@@ -104,10 +104,10 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.1*mm));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0));
   fParticleGun->SetParticleEnergy(661.7*keV);
 
-  G4double cover = 1;
+  G4double cover = 0.25;
 	G4double random = G4UniformRand();
   G4double r = cover*std::sqrt(random);
 

@@ -147,7 +147,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   G4Transform3D transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
 
-  //G4VPhysicalVolume* p_outerTube = new G4PVPlacement(transform, l_outerTube, "p_outerTube", logicWorld, 0, 0, fCheckOverlaps);
+  G4VPhysicalVolume* p_outerTube = new G4PVPlacement(transform, l_outerTube, "p_outerTube", logicWorld, 0, 0, fCheckOverlaps);
 
   //The conical stuff
 
@@ -240,15 +240,15 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   p_crystalBox = new G4PVPlacement(transform, l_crystalBox, "p_crystalBox", logicWorld, 0, 0, fCheckOverlaps);
 
 	//side_"detector"
-	hy = hz = 20*mm;
-	hx= 1*mm;
+	hy = hz = 10*mm;
+	hx = 0.0001*mm;
 
 	s_sideBox = new G4Box("s_sideBox", 0.5*hx, 0.5*hy, 0.5*hz);
-	l_sideBox = new G4LogicalVolume(s_crystalBox, air_mat, "l_sideBox");
+	l_sideBox = new G4LogicalVolume(s_sideBox, air_mat, "l_sideBox");
 
   G4double y_translation = 60*mm+0.5*hx;
-  z_translation = 0.1*mm;
-  rotation = G4RotationMatrix();
+  z_translation = 0.5*hy;
+	rotation = G4RotationMatrix();
 	rotation.rotateZ(90*deg);
   transform = G4Transform3D(rotation, G4ThreeVector(0,y_translation,z_translation));
   p_sideBox = new G4PVPlacement(transform, l_sideBox, "p_sideBox", logicWorld, 0, 0, fCheckOverlaps);
@@ -271,6 +271,10 @@ void B3DetectorConstruction::ConstructSDandField()
 	SensitiveDetector* Det_crystalBox = new SensitiveDetector("Det_crystalBox");
 
 	SetSensitiveDetector("l_crystalBox", Det_crystalBox);
+
+	SensitiveDetector* Det_sideBox = new SensitiveDetector("Det_sideBox");
+
+	SetSensitiveDetector("l_sideBox", Det_sideBox);
   /*
   // declare crystal as a MultiFunctionalDetector scorer
   //

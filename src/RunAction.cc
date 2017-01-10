@@ -83,7 +83,7 @@ void B3aRunAction::BeginOfRunAction(const G4Run* run)
 
 	auto analysisManager = G4AnalysisManager::Instance();
 
-	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/results/spec_cylinder1mm2.root");
+	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/side_spec.root");
 
 	//directBox
 	analysisManager->CreateH1("directBox", "Energy at end of collimator", 1000, 0, 1000);
@@ -92,6 +92,11 @@ void B3aRunAction::BeginOfRunAction(const G4Run* run)
 
 	//directBox
 	analysisManager->CreateH1("crystalBox", "Energy at end of collimator", 1000, 0, 1000);
+	analysisManager->SetH1XAxisTitle(1, "Energy (keV)");
+	analysisManager->SetH1YAxisTitle(1, "Counts");
+
+	//sideBox
+	analysisManager->CreateH1("sideBox", "Energy at side of collimator", 1000, 0, 1000);
 	analysisManager->SetH1XAxisTitle(1, "Energy (keV)");
 	analysisManager->SetH1YAxisTitle(1, "Counts");
 }
