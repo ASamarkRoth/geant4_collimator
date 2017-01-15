@@ -69,14 +69,12 @@ int main(int argc, char** argv) {
 
 	//TGraph* g_scatter[5];
 	TGraph* g_scatter;
-	int nbr_gammas = 0;
 //Box size = 20x20 mm², nbr_bins = 200 -> bin_width=0.1 mm and bin_area = 0.01 mm² = 1e-4 cm² = 0.0001 cm²
-	double factor = 0.0001;
 
-	const int runs = 5;
+	const int runs = 6;
 
 	//string file_name[runs] = {"simple1mm.root", "simple1.5mm.root", "coneX.root", "cone.root", "cylinder.root"};
-	string file_name[runs] = {"simple1mm2.root", "simple1p5mm2.root", "cone1mm2.root", "cone1p5mm2.root", "cylinder1mm2.root"};
+	string file_name[runs] = {"simple1mm2.root", "simple1p5mm2.root", "cone1mm2.root", "cone1p5mm2.root", "cylinder1mm2.root", "testing.root"};
 	string temp;
 
 	double all[runs];
@@ -88,6 +86,7 @@ int main(int argc, char** argv) {
 	double efficiency2[runs];
 
 	for(int i = 0; i < runs; i++) {
+		cout << "iteration " << i << endl;
 		root_file = new TFile(TString(PWD+file_name[i]));
 		hist1 = (TH2D*) root_file->Get("crystal_mesh");
 		all[i] = hist1->GetEntries();
@@ -103,18 +102,45 @@ int main(int argc, char** argv) {
 		all2[i] = hist3->GetEntries();
 		full_all2[i] = hist3->GetBinContent(662);
 
+		if(i == 3) {
+			TCanvas* C = new TCanvas();
+			hist3->GetXaxis()->CenterTitle();
+			hist3->GetYaxis()->CenterTitle();
+			hist3->SetTitle("");
+			hist3->SetStats(false);
+			hist3->SetMarkerStyle(2);
+			C->SetLogy();
+			hist3->Draw("P");
+			C->SaveAs("spec.png");
+			hist2->GetXaxis()->CenterTitle();
+			hist2->GetYaxis()->CenterTitle();
+			hist2->GetYaxis()->SetTitle("y (0.1 mm)");
+			hist2->GetXaxis()->SetTitle("x (0.1 mm)");
+			hist2->SetTitle("");
+			hist2->SetStats(false);
+			hist2->SetMarkerStyle(2);
+			hist2->Draw("colz");
+			C->SetLogy(0);
+			C->SaveAs("scatter.png");
+		}
+
+
+
 		efficiency[i] = full_all2[i]/all2[i];
 		efficiency2[i] = hist4->GetBinContent(662)/hist4->GetEntries();
 
 		cout << "Standard: all = "<<all[i] << " and full_all = "<<full_all[i] << endl;
 		cout << "New: all2 = "<<all2[i] << " and full_all2 = "<<full_all2[i] << endl;
 		cout << "New direct: all3 "<<hist4->GetEntries() << " and full_all3 = "<< hist4->GetBinContent(662) << endl;
+		cout << "1: divergence = " << std_dev[i] << " efficiency crystal = " << efficiency[i] << " efficency direct = " << efficiency2[i] << endl;
 	}
 
-	double solid_angle = (5.*5)/(4*100.*100);
-	cout <<solid_angle << endl;
+	double solid_angle = (15.*15)/(4*150.*150);
+	cout << 2000000./solid_angle << endl;
 	cout << "Required activity for 1 kHz for 1st = " << (2000000./solid_angle)/full_all2[0]*1000 << endl;
+	cout << "Required activity for 1 kHz for 1st = " << (1000)/(full_all2[0]/(2000000./solid_angle)) << endl;
 
+	/*
 	TFile* root_write = new TFile("finished.root", "RECREATE");
 	TCanvas* C = new TCanvas();
 
@@ -160,9 +186,10 @@ int main(int argc, char** argv) {
 	C->Update();
 
 	C->Write();
-	C->SaveAs("efficiency.pdf");
+	//C->SaveAs("efficiency.pdf");
 
 	//gSystem->ProcessEvents();
+	*/
 	theApp.Run();
 
 	return 0;

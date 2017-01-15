@@ -11,15 +11,39 @@
 
 \section{Collimator simulations for development of a scanning system}
 
-The \textit{Compex} project comprises the development and study of a novel HPGe detector set-up. In its' beauty it will consists of five \textit{Compex}<++> Clovers, i.e. five groups of four crystals brought together within a capsule.
-In nuclear spectroscopy experiments where very exotic structures are to be studied it is necessary to employ a high resolution HPGe detectors. In addition these detectors need to be compact. The compact and exotic together brings \textit{Compex}. In order to confidently discover new physics and propose new nuclear structure properties it is of utmost importance to know the characteristics of the detectors. In this regard it is hence essential to characterise the \textit{Compex} set-up in detail.
+The \textit{Compex} project comprises the development and study of a novel HPGe detector set-up. In its' beauty it will consists of five \textit{Compex} Clovers, i.e. five groups of four crystals brought together within a capsule.
+In nuclear spectroscopy experiments where very exotic structures are to be studied it is necessary to employ a high resolution HPGe detectors.
+In addition these detectors need to be compact.
+The compact and exotic together brings \textit{Compex}.
+In order to confidently discover new physics and propose new nuclear structure properties it is of utmost importance to know the characteristics of the detectors, especially if it is a new type of detector.
+In this regard it is hence essential to characterise the \textit{Compex} set-up in detail.
 
-The characterisation of HPGe crystals is achieved with a scanning system. There exists some different scanning systems \cite{}. All systems utilise a collimator in some way. In the traditional scanning system a $\gamma$-beam is directed to one end of the crystal in a right angle. Surrounded on the sides of the crystal other $\gamma$-detectors, such as scintillators, are placed. With the help of slits $90 ^\circ$ Compton scattered $\gamma$-rays with a specific energy can be gated on. The origin of such signals can be narrowed down to a small region in the crystal and therefore its properties here can be known. By doing this for many regions one scans a complete crystal and studies:
+The characterisation of HPGe crystals is achieved with a scanning system.
+There exists some different scanning systems \cite{phd:Dimmock, art:Crespi, art:Domingo}.
+All systems utilise a collimator in some way.
+In the traditional scanning system, cf. Figure  a $\gamma$-beam is directed to one end of the crystal in a right angle.
+Surrounded on the sides of the crystal other $\gamma$-detectors, such as scintillators, are placed. With the help of slits $90 ^\circ$ Compton scattered $\gamma$-rays with a specific energy can be gated on.
+The origin of such signals can be narrowed down to a small region in the crystal and therefore its properties here can be known.
+By doing this for many regions one scans a complete crystal and studies:
 \begin{itemize}
   \item Energy resolution
   \item Signal amplitude
   \item Rise time
 \end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{/home/anton/Documents/PhD/ScanningSystem/figs_and_draws/ScanningSystem1.png}
+  \caption{Liverpool scanning table \cite{phd:Dimmock}}
+  \label{fig:livScanning}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{/home/anton/Documents/PhD/ScanningSystem/figs_and_draws/ScanningSystem2.png}
+  \caption{Measures of the Liverpool scanning table \cite{phd:Dimmock}}
+  \label{fig:livScanning2}
+\end{figure}
 
 Other scanning techniques are the pulse shape comparison scan and the mix of PSCS and $\gamma$-ray imaging.
 A first intention is to characterise the \textit{Compex} crystals with the traditional technique.
@@ -28,7 +52,10 @@ Important properties of the collimator are:
 \begin{itemize}
   \item Divergence of $\gamma$-rays
   \item Scattering efficiency (full energy efficiency)
+  \item Transmittance or required source activity to obtain a desired count rate in the detector
 \end{itemize}
+The divergence of the beam governs the postion precision that is possible to obtain. The scattering efficiency determines the amount of $\gamma$-rays that exit the collimator which have full energy. It is an important quantity since scattered particles increase the general divergence of the beam and cannot be used when the $\gamma$-ray energy is used. The transmittance governs the count rate in the detector and hence in the continuation duration of the measurements. A known transmittance enables a well chosen source activity to obtain a desired detector count rate.
+
 The simplest collimator is a volume with a cylinder hole where the volume can absorb $\gamma$-rays which are emitted badly.
 By adjusting the diameter of the cylinder the beam divergence can easily be determined.
 The scattering efficiency is not trivial to know.
@@ -53,13 +80,19 @@ The tip of the cones in the same direction of the beam was by far the best and i
   \label{fig:geometry}
 \end{figure}
 
+\section{Physics model}
+\begin{itemize}
+  \item G4EmStandardPhysics
+\end{itemize}
+
 
 \section{Method}
-\subsection{Primary generator and run}
+\subsection{Primary generator}
 The primary generator in Geant4 was set as follows:
 \begin{description}
+  \item[Type] G4ParticleGun
   \item[Particle] Gamma-photons
-  \item[Primary vertex] $(0,0,0)$
+  \item[Position] $(0,0,0)$
   \item[Energy] $661.7$ keV to resemble a $^{137}$Cs source
   \item[Direction] $(u_x, u_y, 1)$ where:
   \begin{align}
@@ -70,7 +103,12 @@ The primary generator in Geant4 was set as follows:
     \label{eq:GDir}
   \end{align}
 \end{description}
-A run was comprised of $2\cdot 10^6$ events. For the first run it was 100000.
+\subsection{Run}
+\begin{description}
+  \item[Multithread] 4 parallel processes
+  \item[Events] $2\cdot 10^6$
+\end{description}
+%A run was comprised of $2\cdot 10^6$ events. For the first run it was 100000.
 
 \subsection{Detectors}
 For the final analysis a box scoring mesh with the following settings was created:
@@ -95,11 +133,25 @@ A sensitive detector was set up to create an energy spectrum. It was placed 5 cm
 The flux (first time cm$^{-2}$) in number of $\gamma$-rays was scored with one of the built-in Geant4 scorers. Besides this, the sensitive detector scored the energy of the incoming photons and stored the energies in a histogram.
 The scattering efficiency was determined as the ratio of the number of full energy $\gamma$-rays and the total detected in the sensitive detector. The beam divergence was determined as $3\sigma$ of the 2D flux. Finally, the required activity was calculated on the basis of the number of full energy $\gamma$-rays detected and the solid angle coverage:
 \begin{equation}
-  \Omega = \frac{5^2}{100^2}
+  \Omega = \frac{\pi 15^2}{4\pi \cdot 150^2}
   \label{eq:solid_angle}
 \end{equation}
 
 \section{Results}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{spec.png}
+  \caption{Spectrum for integrated cones (i).}
+  \label{fig:spec}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{scatter.png}
+  \caption{Divergence for integrated cones (i).}
+  \label{fig:scatter}
+\end{figure}
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{efficiency.eps}
@@ -114,7 +166,7 @@ The scattering efficiency was determined as the ratio of the number of full ener
   \item[Integrated cylinders] 5 cylinders (20 mm length) where the last one had a diameter of 1 mm and the rest an increasing diameter of 0.05 mm.
 \end{description}
 
-The required activity to achieve a count rate of 1 kHz for the first configuration is about 500 MBq.
+The required activity to achieve a count rate of 1 kHz for the first configuration is about 130 MBq.
 
 
 \section{Conclusion}
@@ -134,9 +186,14 @@ Several further configurations were investigated to see if they possibly could b
   \item Integrated cones separated a set distance.
   \item Integrated cones flipped.
   \item Integrated cylinders separated a set distance.
-  \item
 \end{itemize}
 Several different dimensions were examined for the different configurations (see notes.txt in 2nd\_analysis).
+
+\subsection{Improvements}
+Possible improvements to the simulation:
+\begin{itemize}
+  \item Employ a biasing technique (reversed Monte Carlo, geometry based importance biasing)
+\end{itemize}
 
 
 
@@ -186,8 +243,12 @@ Translated into the count rate per cm$^2$ for a 1 GBq source (see 2nd\_analysis/
 \end{description}
 
 \subsection{Conclusion}
-A diameter of 6 cm seems to reduce the radiation exposure around the collimator to viable levels. For additional safety measures it will be covered with another 4 cm heavy met around the cylinder and on top and this will imply almost 100 \% shielding.
+A diameter of 6 cm seems to reduce the radiation exposure around the collimator to viable levels.
+For additional safety measures it will be covered with another 4 cm heavy met around the cylinder and on top and this will imply almost 100~\% shielding.
 
 
 
+
+\bibliographystyle{unsrt}
+\bibliography{ref}
 \end{document}

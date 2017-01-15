@@ -68,7 +68,6 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 
 	G4cout << "Running modified DumpQuantityToFile" << G4endl;
   //
-  /*
   if(verboseLevel > 0) {
     G4cout << "User-defined DumpQuantityToFile() method is invoked."
            << G4endl;
@@ -180,7 +179,6 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 		root_file->Write();
 	}
 #endif
-*/
 
 
 }

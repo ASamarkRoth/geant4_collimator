@@ -63,7 +63,7 @@ void B3aRunAction::BeginOfRunAction(const G4Run* run)
 
 	analysisManager->OpenFile("side_spec2.root");
 #ifdef G4ANALYSIS_USE_ROOT
-	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/side_spec2.root");
+	analysisManager->OpenFile("/home/anton/Documents/PhD/geant4/project_course/2nd_analysis/results/spec_testing.root");
 #endif
 
 	//directBox

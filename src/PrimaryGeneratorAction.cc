@@ -107,11 +107,11 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0));
   fParticleGun->SetParticleEnergy(661.7*keV);
 
-  G4double cover = 0.25;
+  G4double cover = 0.2;
 	G4double random = G4UniformRand();
   G4double r = cover*std::sqrt(random);
 
-  G4double phi = G4UniformRand()*pi;
+  G4double phi = G4UniformRand()*2*pi;
 
   G4double ux = r*std::cos(phi);
   G4double uy = r*std::sin(phi);
@@ -124,7 +124,7 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   */
 
 
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,1,uy));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,1));
 
   //create vertex
   //

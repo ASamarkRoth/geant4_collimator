@@ -1,0 +1,32 @@
+Examination seminar
+
+Background/motivation:
+Confident, trustworthy and reliable results -> new nuclear structure
+Characterise Compex crystals -> Scanning system (show illustrations)
+Focused, pencil beam -> collimator. It came to our attention that an integrated cone structure can decrease scattered and this is relevant in the amount of full energy gammas that can be used (however more important in other scanning systems). 
+
+Objective:
+Examine whether such a structure can increase the scattering efficiency and evaluate its use in our scanning system with Geant4.
+	Scattering efficiency
+	Beam divergence
+	Required source activity for 1 kHz count rate
+
+Walk through Geant4 program:
+	Geometry
+		Cylinder
+		Hole
+		Cones
+	Probes
+		Sensitive volume
+			Energy spectrum
+		Scorers
+			Position
+	Primary generator
+		All
+	Run
+	Analysis
+	Results
+		Spectrum
+		Scattering efficiency vs. divergence
+		Required source activity
+	Conclusion

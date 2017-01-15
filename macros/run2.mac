@@ -1,8 +1,4 @@
-# $Id: run2.mac 85993 2014-11-06 16:34:10Z ihrivnac $
-#
-# Macro file of "exampleB3.cc"
-# To be run preferably in batch, without graphics:
-# % exampleB3 run3.mac
+#This is run for 2nd_analysis, i.e. for the final collimator analysis.
 #
 #/run/numberOfWorkers 4
 /run/initialize
@@ -46,11 +42,11 @@
 /score/filter/particleWithKineticEnergy FullFilter 660 662 keV gamma
 
 
-/run/beamOn 2000000
+/run/beamOn 5000000
 /score/drawProjection crystal_mesh current
 
-/score/dumpQuantityToFile crystal_mesh current ../2nd_analysis/results/cylinder1mm2.txt ROOT
-/score/dumpQuantityToFile crystal_mesh current_full ../2nd_analysis/results/full_cylinder1mm2.txt ROOT
+/score/dumpQuantityToFile crystal_mesh current ../2nd_analysis/results/testing.txt ROOT
+/score/dumpQuantityToFile crystal_mesh current_full ../2nd_analysis/results/full_testing.txt ROOT
 
 #/score/dumpQuantityToFile directBox_mesh current results/simple1.5mm.txt ROOT
 #/score/dumpQuantityToFile directBox_mesh current_full results/full_simple1.5mm.txt ROOT

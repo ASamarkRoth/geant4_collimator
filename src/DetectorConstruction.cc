@@ -142,7 +142,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   G4double z_translation = hz/2;
   G4RotationMatrix rotation = G4RotationMatrix();
-	rotation.rotateY(180*deg); //for flipped cone and cylinders
+	//rotation.rotateY(180*deg); //for flipped cone and cylinders
 
   G4Transform3D transform = G4Transform3D(rotation, G4ThreeVector(0,0,z_translation));
 
@@ -160,7 +160,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   inner_r_min = inner_r_max = outer_r_min = innerR;
   //inner_r_min = outer_r_min = 0;
   if(outer_r_max < 0) outer_r_max = (innerR+0.2)*mm;
-  outer_r_max = (innerR+4)*mm;
+  outer_r_max = (innerR+0.2)*mm;
 
   s_cone = new G4Cons("s_cone", inner_r_min, inner_r_max, outer_r_min, outer_r_max, 0.5*cone_length, startAngle, spanningAngle);
 
@@ -171,7 +171,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   for(int j=0;j<nbr_cones;j++) {
     name = "p_cone"+std::to_string(j);
-    //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
+    new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(j+0.5)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps);
     //new G4PVPlacement(0, G4ThreeVector(0, 0, -0.5*hz+(2*j+1)*cone_length), l_cone, name, l_outerTube, 0, 0, fCheckOverlaps); // for special separation style
     G4cout << "Placement = " << G4ThreeVector(0, 0, (2*j+1)*cone_length)/cm << G4endl;
   }
