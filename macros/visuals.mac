@@ -8,11 +8,12 @@
 /vis/scene/add/axes 0.5 0.5 0.5
 #/vis/scene/add/axes 0 0 0
 
+/vis/geometry/set/colour World 0 black
 /vis/geometry/set/colour l_outerTube 0 red
 /vis/geometry/set/colour l_cone 0 blue
 /vis/geometry/set/colour l_directBox 0 green
-/vis/geometry/set/colour l_crystalBox 0 black
+/vis/geometry/set/colour l_crystalBox 0 yellow
 /vis/geometry/set/colour l_sideBox 0 black
 
-/vis/viewer/set/background white
+#/vis/viewer/set/background white
 #/vis/scene/add/axes 0 0 0 0.2 m False

@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
 	double solid_angle = (15.*15)/(4*150.*150);
 	cout << 2000000./solid_angle << endl;
 	cout << "Required activity for 1 kHz for 1st = " << (2000000./solid_angle)/full_all2[0]*1000 << endl;
-	cout << "Required activity for 1 kHz for 1st = " << (1000)/(full_all2[0]/(2000000./solid_angle)) << endl;
+	cout << "Required activity for 1 kHz for 1st = " << (1000)/(full_all2[2]/(2000000./solid_angle)) << endl;
 
 	/*
 	TFile* root_write = new TFile("finished.root", "RECREATE");

@@ -110,6 +110,7 @@ void B3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double cover = 0.2;
 	G4double random = G4UniformRand();
   G4double r = cover*std::sqrt(random);
+	r=0;
 
   G4double phi = G4UniformRand()*2*pi;
 

@@ -128,9 +128,9 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 
   // Create collimator
-  innerR = 1*mm*0.5;
+  innerR = 3*mm*0.5;
   //innerR = 0*mm; //for cylinders
-	outerR = 6.*cm;
+	outerR = 10.*cm;
   hz = 10.*cm;
   startAngle = 0.*deg;
   spanningAngle = 360.*deg;
@@ -160,7 +160,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   inner_r_min = inner_r_max = outer_r_min = innerR;
   //inner_r_min = outer_r_min = 0;
   if(outer_r_max < 0) outer_r_max = (innerR+0.2)*mm;
-  outer_r_max = (innerR+0.2)*mm;
+  outer_r_max = (innerR+5)*mm;
 
   s_cone = new G4Cons("s_cone", inner_r_min, inner_r_max, outer_r_min, outer_r_max, 0.5*cone_length, startAngle, spanningAngle);
 
@@ -250,7 +250,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 	rotation = G4RotationMatrix();
 	rotation.rotateZ(90*deg);
   transform = G4Transform3D(rotation, G4ThreeVector(0,y_translation,z_translation));
-  p_sideBox = new G4PVPlacement(transform, l_sideBox, "p_sideBox", logicWorld, 0, 0, fCheckOverlaps);
+  //p_sideBox = new G4PVPlacement(transform, l_sideBox, "p_sideBox", logicWorld, 0, 0, fCheckOverlaps);
   //always return the physical World
   //
   return physWorld;

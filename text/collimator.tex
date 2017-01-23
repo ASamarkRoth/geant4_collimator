@@ -11,25 +11,33 @@
 
 \section{Collimator simulations for development of a scanning system}
 
-The \textit{Compex} project comprises the development and study of a novel HPGe detector set-up. In its' beauty it will consists of five \textit{Compex} Clovers, i.e. five groups of four crystals brought together within a capsule.
-In nuclear spectroscopy experiments where very exotic structures are to be studied it is necessary to employ a high resolution HPGe detectors.
-In addition these detectors need to be compact.
-The compact and exotic together brings \textit{Compex}.
-In order to confidently discover new physics and propose new nuclear structure properties it is of utmost importance to know the characteristics of the detectors, especially if it is a new type of detector.
+A big part of the Lundium project is comprised of the development and study of a novel high purity germanium (HPGe) detector set-up.
+In nuclear spectroscopy experiments in the superheavy element region the detection of x-rays is particularly interesting since they enable a pin point of the $Z$ number of the decaying nucleus. %where very exotic structures are to be studied it is necessary to employ high resolution HPGe detectors.
+To increase the detection efficiency of the x-rays it is important to have a compact composition of HPGe crystals.
+%In addition these detectors need to be compact to increase the detection efficiency.
+The compact and x-rays together bring \textit{Compex} and this is the name of the new type of HPGe crystal detectors.
+In its' beauty the HPGe set-up will consist of five so called CLOVERS, i.e. five groups of four Compex crystals brought together within a capsule.
+
+In order to claim new nuclear structure physics it is of utmost importance to know the characteristics of the detectors, especially if it is a new type of detector.
 In this regard it is hence essential to characterise the \textit{Compex} set-up in detail.
 
 The characterisation of HPGe crystals is achieved with a scanning system.
-There exists some different scanning systems \cite{phd:Dimmock, art:Crespi, art:Domingo}.
+There exist some different scanning systems \cite{phd:Dimmock, art:Crespi, art:Domingo}.
 All systems utilise a collimator in some way.
-In the traditional scanning system, cf. Figure  a $\gamma$-beam is directed to one end of the crystal in a right angle.
-Surrounded on the sides of the crystal other $\gamma$-detectors, such as scintillators, are placed. With the help of slits $90 ^\circ$ Compton scattered $\gamma$-rays with a specific energy can be gated on.
-The origin of such signals can be narrowed down to a small region in the crystal and therefore its properties here can be known.
-By doing this for many regions one scans a complete crystal and studies:
-\begin{itemize}
-  \item Energy resolution
-  \item Signal amplitude
-  \item Rise time
-\end{itemize}
+The purpose of a collimator is to create a collimated $\gamma$-ray beam, a pencil beam or a focused beam with the use of an isotropical $\gamma$-ray source.
+
+In the traditional scanning system, cf. Figure \ref{fig:livScanning}, a $\gamma$-beam is directed to one end of the crystal in a right angle.
+Surrounded on the sides of the crystal other $\gamma$-detectors, such as scintillators, are placed.
+With the help of slits, only $90 ^\circ$ Compton scattered $\gamma$-rays, are detected in the scintillators.
+Coincidence measurements in the \textit{Compex} crystal and a scintillator determines a $\gamma$-ray interaction at a certain $(x,y,z)$ coordinate in the HPGe crystal.
+With a positioning system the collimator is moved and the $(x,y)$ coordinate is varied.
+With multiple slits the $z$ coordinate is varied.
+This way a HPGe crystal is scanned and the response signals are studied.
+%\begin{itemize}
+%  \item Energy resolution
+%  \item Signal amplitude
+%  \item Rise time
+%\end{itemize}
 
 \begin{figure}[H]
   \centering
@@ -45,22 +53,24 @@ By doing this for many regions one scans a complete crystal and studies:
   \label{fig:livScanning2}
 \end{figure}
 
-Other scanning techniques are the pulse shape comparison scan and the mix of PSCS and $\gamma$-ray imaging.
-A first intention is to characterise the \textit{Compex} crystals with the traditional technique.
-To be able to do this one needs a collimator.
+Such a scanning system is intended to be built in Lund.
+A main ingredient in the scanning system is the $\gamma$-ray collimator.
+
+%Other scanning techniques are the pulse shape comparison scan and the mix of PSCS and $\gamma$-ray imaging.
+%A first intention is to characterise the \textit{Compex} crystals with the traditional technique.
+%To be able to do this one needs a collimator.
 Important properties of the collimator are:
 \begin{itemize}
-  \item Divergence of $\gamma$-rays
+  \item Divergence of the transmitted $\gamma$-rays
   \item Scattering efficiency (full energy efficiency)
   \item Transmittance or required source activity to obtain a desired count rate in the detector
 \end{itemize}
-The divergence of the beam governs the postion precision that is possible to obtain. The scattering efficiency determines the amount of $\gamma$-rays that exit the collimator which have full energy. It is an important quantity since scattered particles increase the general divergence of the beam and cannot be used when the $\gamma$-ray energy is used. The transmittance governs the count rate in the detector and hence in the continuation duration of the measurements. A known transmittance enables a well chosen source activity to obtain a desired detector count rate.
+The divergence of the beam governs the position precision that is possible to obtain with the collimator. The scattering efficiency determines the amount of $\gamma$-rays that exit the collimator which have full energy. It is an important quantity since scattered particles increase the general divergence of the beam and cannot be used when the $\gamma$-ray energy is utilised in the analysis (as is the case for the system to be built in Lund). The transmittance governs the count rate in the detector and in the continuation the duration of the measurements. A known transmittance enables a well chosen source activity to obtain a desired detector count rate.
 
-The simplest collimator is a volume with a cylinder hole where the volume can absorb $\gamma$-rays which are emitted badly.
-By adjusting the diameter of the cylinder the beam divergence can easily be determined.
+The simplest collimator is a volume with a cylinder hole where the volume can absorb $\gamma$-rays which are emitted with a too large divergence.
 The scattering efficiency is not trivial to know.
-The idea of integrating cones on top of the cylinder was told to be a preferable configuration concerning the scattering efficiency.
-In this small project the performance of different collimators have been studied to determine the suitable collimator in use within the \textit{Compex} project.
+A rumour said that a collimator with integrated cones actually can increase the scattering efficiency and this triggered a mini project.
+In this small project, this rumour is set to test and the performance of different collimators are studied with Geant4 simulations in order to choose a suitable collimator to be used in the scanning system in Lund.
 
 \section{Geometry definition}
 The base geometry:
@@ -182,7 +192,7 @@ The beam divergence is rather not a measure of the spread of the beam but more a
 
 Several further configurations were investigated to see if they possibly could better optimise a collimator. These were:
 \begin{itemize}
-  \item Integrated cones with the end coned removed.
+  \item Integrated cones with the end cone removed.
   \item Integrated cones separated a set distance.
   \item Integrated cones flipped.
   \item Integrated cylinders separated a set distance.
